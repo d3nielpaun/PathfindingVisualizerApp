@@ -1,0 +1,76 @@
+:root {
+    --background-color: rgb(216, 216, 216);
+    --header-color: rgb(58, 54, 0);
+    --text-color: white;
+    --node-border-color: rgb(36, 40, 85);
+    --outer-container-color: rgb(84, 89, 58);
+    --inner-container-color: rgb(185, 185, 185);
+    --graph-color: rgb(217, 217, 217);
+    --start-node-color: green;
+    --finish-node-color: red;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    overflow: hidden;
+    background: var(--background-color);
+  }
+
+.app-container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: var(--header-color);
+    color: var(--text-color);
+    font-size: 0.8rem;
+}
+
+.outer-grid-container {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background: var(--outer-container-color);
+}
+
+.inner-grid-container {
+    background: var(--inner-container-color);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.grid {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--node-border-color);
+    border-top: 1px solid var(--node-border-color);
+    background: var(--graph-color);
+}
+
+.row {
+    display: flex;
+    border-bottom: 1px solid var(--node-border-color);
+}
+
+.node-start {
+    background: var(--start-node-color);
+}
+
+.node-finish {
+    background: var(--finish-node-color);
+}

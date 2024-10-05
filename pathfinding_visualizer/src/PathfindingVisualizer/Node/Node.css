@@ -1,0 +1,5 @@
+.node {
+    width: 27px;
+    height: 27px;
+    border-right: 1px solid var(--node-border-color);
+}
