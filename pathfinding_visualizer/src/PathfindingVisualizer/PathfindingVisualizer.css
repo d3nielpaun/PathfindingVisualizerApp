@@ -2,15 +2,15 @@
     --background-color: rgb(216, 216, 216);
     --header-color: rgb(66, 66, 66);
     --text-color: white;
-    --node-border-color: rgb(36, 40, 85);
+    --node-border-color: black;
     --outer-container-color: black;
     --inner-container-color: rgb(185, 185, 185);
     --graph-color: rgb(217, 217, 217);
     --start-node-color: rgb(39, 185, 39);
     --finish-node-color: rgb(207, 39, 39);
     --wall-node-color: rgb(71, 71, 71);
-    --visited-node-color: orange;
-    --shortest-path-node-color: yellow;
+    --visited-node-color: rgb(218, 194, 127);
+    --shortest-path-node-color: rgb(244, 255, 125);
 }
 
 * {

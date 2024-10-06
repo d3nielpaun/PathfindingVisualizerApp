@@ -4,9 +4,8 @@ import './Node.css';
 
 const Node = ({ row, col, isStart, isFinish,
     isWall, onMouseDown, onMouseEnter, onMouseUp }) => {
-    
-    // const [node, setState] = useState(null);  DON'T KNOW IF I NEED THIS OR NOT
 
+   
     // Sets class for start and finish nodes
     let extraClass = '';
     if (isStart) {
@@ -29,5 +28,6 @@ const Node = ({ row, col, isStart, isFinish,
         </div>
     );
 };
+
 
 export default Node;

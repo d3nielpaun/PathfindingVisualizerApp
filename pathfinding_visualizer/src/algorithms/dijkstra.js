@@ -1,3 +1,6 @@
+/*
+ * Implements Dijkstra's Algorithm
+ */
 
 
 const dijkstra = (grid, startNode, finishNode) => {
@@ -7,7 +10,7 @@ const dijkstra = (grid, startNode, finishNode) => {
     while (unvisitedNodes.length > 0) {
         sortNodesByDistance(unvisitedNodes);
         const closestNode = unvisitedNodes.shift();
-        if (closestNode.isWall) continue;  // Definitely not efficient to sort everytime we meet a wall
+        if (closestNode.isWall) continue;  // Might consider using minHeap for more efficiency
         if (closestNode.distance === Infinity) return visitedNodesInOrder;
         closestNode.isVisited = true;
         visitedNodesInOrder.push(closestNode);
