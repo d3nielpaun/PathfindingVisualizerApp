@@ -1,13 +1,16 @@
 :root {
     --background-color: rgb(216, 216, 216);
-    --header-color: rgb(58, 54, 0);
+    --header-color: rgb(66, 66, 66);
     --text-color: white;
     --node-border-color: rgb(36, 40, 85);
-    --outer-container-color: rgb(84, 89, 58);
+    --outer-container-color: black;
     --inner-container-color: rgb(185, 185, 185);
     --graph-color: rgb(217, 217, 217);
-    --start-node-color: green;
-    --finish-node-color: red;
+    --start-node-color: rgb(39, 185, 39);
+    --finish-node-color: rgb(207, 39, 39);
+    --wall-node-color: rgb(71, 71, 71);
+    --visited-node-color: orange;
+    --shortest-path-node-color: yellow;
 }
 
 * {
@@ -73,4 +76,16 @@ body, html {
 
 .node-finish {
     background: var(--finish-node-color);
+}
+
+.node-wall {
+    background: var(--wall-node-color);
+}
+
+.node-visited {
+    background: var(--visited-node-color);
+}
+
+.node-shortest-path {
+    background: var(--shortest-path-node-color)
 }
