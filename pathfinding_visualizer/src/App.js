@@ -33,7 +33,7 @@ const App = () => {
             <PathfindingVisualizer
                selectedAlgorithm={selectedAlgorithm}
                isVisualizing={isVisualizing}
-               resetGrid={resetGrid}>   
+               resetGrid={resetGrid}>
             </PathfindingVisualizer>
          </div>
       </div>

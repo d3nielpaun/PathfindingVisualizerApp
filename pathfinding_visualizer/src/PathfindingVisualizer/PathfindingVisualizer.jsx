@@ -20,14 +20,15 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
 
    useEffect(() => {
       const initialGrid = initializeGrid();
-      console.log(initialGrid);
       setGrid(initialGrid);
    }, []);
 
-   
+
    useEffect(() => {
       if (isVisualizing) {
-         runAlgorithm();
+         if (selectedAlgorithm === "Dijkstra") {
+            visualizeDijkstra();
+         }
       }
    }, [isVisualizing]);
 
@@ -40,12 +41,6 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
       setGrid(newGrid);
    }, [resetGrid]);
    */
-
-   const runAlgorithm = () => {
-      if (selectedAlgorithm === "Dijkstra") {
-         visualizeDijkstra();
-      }
-   };
 
 
    const clearTimeouts = () => {
@@ -87,8 +82,8 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
          if (node.isFinish) {
             setTimeout(() => {
                animateShortestPath(nodesInShortestPathOrder);
-               }, 10 * i);
-               return;
+            }, 10 * i);
+            return;
          }
          setTimeout(() => {
             const node = visitedNodesInOrder[i];
@@ -132,17 +127,18 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
          <div className="inner-grid-container">
             <div className="grid" onMouseLeave={handleMouseLeave}>
                {grid.map((row, rowIdx) => (
-                  <div key={rowIdx} className="row">
-                     {row.map((node, colIdx) => {
-                        const { row, col, isStart, isFinish, isWall } = node;
+                  <div key={rowIdx} id={rowIdx} className="row">
+                     {row.map((node) => {
+                        const { row, col, isStart, isFinish, isWall, isVisited } = node;
                         return (
                            <Node
-                              key={colIdx}
+                              key={`${row}-${col}`}
                               row={row}
                               col={col}
                               isStart={isStart}
                               isFinish={isFinish}
                               isWall={isWall}
+                              isVisited={isVisited}
                               onMouseDown={(event) => handleMouseDown(event, row, col)}
                               onMouseEnter={() => handleMouseEnter(row, col)}
                               onMouseUp={() => handleMouseUp()}>
