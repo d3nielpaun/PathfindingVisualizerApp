@@ -14,11 +14,12 @@ const App = () => {
    };
 
    const onStartButtonClick = () => {
+      setResetGrid(false);
       setIsVisualizing(true);
    };
 
    const onResetButtonClick = () => {
-      setResetGrid(prev => !prev);
+      setResetGrid(true);
       setIsVisualizing(false);
    };
 

@@ -9,12 +9,13 @@ const NUM_OF_COLS = 50;
 const START_NODE_ROW = 9;
 const START_NODE_COL = 5;
 const FINISH_NODE_ROW = 9;
-const FINISH_NODE_COL = 44;
+const FINISH_NODE_COL = 20;
 
 
 const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) => {
    const [grid, setGrid] = useState([]);
    const [mousePressed, setMousePressed] = useState(false);
+   const [isResetting, setIsResetting] = useState(false);
    const animationTimeouts = useRef([]);
 
 
@@ -25,27 +26,29 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
 
 
    useEffect(() => {
-      if (isVisualizing) {
+      if (isVisualizing && !resetGrid) {
          if (selectedAlgorithm === "Dijkstra") {
             visualizeDijkstra();
          }
       }
    }, [isVisualizing]);
 
-   /*
+
    useEffect(() => {
-      // Clear any active animations before resetting the grid
-      clearTimeouts();
-      // Reset the grid to the initial state
-      const newGrid = resetAllNodes(grid);
-      setGrid(newGrid);
+      if (resetGrid && !isVisualizing) {
+         clearTimeouts();
+         const newGrid = resetAllNodes(grid);
+         console.log(newGrid);
+         setGrid(newGrid); // Update the grid with reset nodes
+         setIsResetting(false);
+      }
    }, [resetGrid]);
-   */
 
 
    const clearTimeouts = () => {
       animationTimeouts.current.forEach(timeout => clearTimeout(timeout));
       animationTimeouts.current = [];
+      setIsResetting(true);
    };
 
 
@@ -53,15 +56,16 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
       event.preventDefault();
       if (isVisualizing) return;
       setMousePressed(true);
-      const newGrid = getNewGridWithWallToggled(grid, row, col);
-      setGrid(newGrid);
+      const node = grid[row][col];
+      node.isWall = !node.isWall; // Mutate grid directly
+      setGrid([...grid]); // Trigger re-render with a new reference to the grid array
    };
-
-
+   
    const handleMouseEnter = (row, col) => {
       if (mousePressed) {
-         const newGrid = getNewGridWithWallToggled(grid, row, col);
-         setGrid(newGrid);
+         const node = grid[row][col];
+         node.isWall = !node.isWall; // Mutate grid directly
+         setGrid([...grid]); // Trigger re-render with a new reference to the grid array
       }
    };
 
@@ -75,7 +79,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
       setMousePressed(false);
    };
 
-
+   
    const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
       for (let i = 1; i < visitedNodesInOrder.length; i++) {
          const node = visitedNodesInOrder[i];
@@ -101,16 +105,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
               'node node-shortest-path';
           }, 50 * i);
       }
-  };
-   
-
-   const updateNodeInGrid = (grid, row, col, newProps) => {
-      const newGrid = grid.slice();
-      const node = newGrid[row][col];
-      const updatedNode = { ...node, ...newProps };
-      newGrid[row][col] = updatedNode;
-      return newGrid;
-   };
+  };   
 
    
    const visualizeDijkstra = () => {
@@ -168,19 +163,6 @@ const initializeGrid = () => {
 };
 
 
-// Function to toggle wall state of a node
-const getNewGridWithWallToggled = (grid, row, col) => {
-   const newGrid = grid.slice();
-   const node = newGrid[row][col];
-   const newNode = {
-      ...node,
-      isWall: !node.isWall,
-   };
-   newGrid[row][col] = newNode;
-   return newGrid;
-};
-
-
 // Function to create a new node
 const createNode = (row, col) => {
    return {
@@ -195,21 +177,30 @@ const createNode = (row, col) => {
    };
 };
 
-/*
-// Function to reset all nodes
 const resetAllNodes = (grid) => {
    const newGrid = grid.map(row =>
-      row.map(node => ({
-         ...node,
-         isVisited: false,
-         distance: Infinity,
-         previousNode: null,
-         isShortestPath: false,
-         isWall: node.isWall, // Keep walls as they are
-      }))
+      row.map(node => {
+         // Reset the node class in the DOM to remove animations
+         const nodeElement = document.getElementById(`node-${node.row}-${node.col}`);
+         if (nodeElement) {
+            nodeElement.className = 'node';
+         }
+
+         // Reset the node properties in the grid
+         return {
+            ...node,
+            isVisited: false,
+            isWall: node.isWall, // Walls stay the same
+            isStart: node.isStart,
+            isFinish: node.isFinish,
+            distance: Infinity,
+            previousNode: null,
+         };
+      })
    );
    return newGrid;
 };
-*/
+
+
 
 export default PathfindingVisualizer;

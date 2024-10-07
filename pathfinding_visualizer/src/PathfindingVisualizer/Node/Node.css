@@ -2,8 +2,8 @@
     --start-node-color: rgb(39, 185, 39);
     --finish-node-color: rgb(207, 39, 39);
     --wall-node-color: rgb(71, 71, 71);
-    --visited-node-color: rgb(177, 244, 166);
-    --shortest-path-node-color: rgb(255, 127, 125);
+    --visited-node-color: rgb(155, 222, 231);
+    --shortest-path-node-color: rgb(231, 161, 155);
 }
 
 .node {
@@ -29,5 +29,5 @@
 }
 
 .node-shortest-path {
-    background: var(--shortest-path-node-color)
+    background: var(--shortest-path-node-color);
 }
