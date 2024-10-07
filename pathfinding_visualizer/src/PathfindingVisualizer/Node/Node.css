@@ -1,5 +1,33 @@
+:root {
+    --start-node-color: rgb(39, 185, 39);
+    --finish-node-color: rgb(207, 39, 39);
+    --wall-node-color: rgb(71, 71, 71);
+    --visited-node-color: rgb(177, 244, 166);
+    --shortest-path-node-color: rgb(255, 127, 125);
+}
+
 .node {
     width: 27px;
     height: 27px;
     border-right: 1px solid var(--node-border-color);
+}
+
+.node-start {
+    background: var(--start-node-color);
+}
+
+.node-finish {
+    background: var(--finish-node-color);
+}
+
+.node-wall {
+    background: var(--wall-node-color);
+}
+
+.node-visited {
+    background: var(--visited-node-color);
+}
+
+.node-shortest-path {
+    background: var(--shortest-path-node-color)
 }

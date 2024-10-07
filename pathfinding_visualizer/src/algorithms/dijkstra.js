@@ -8,9 +8,9 @@ const dijkstra = (grid, startNode, finishNode) => {
     startNode.distance = 0;
     const unvisitedNodes = getAllNodes(grid);
     while (unvisitedNodes.length > 0) {
-        sortNodesByDistance(unvisitedNodes);
+        sortNodesByDistance(unvisitedNodes);  // Consider using minHeap for more efficiency
         const closestNode = unvisitedNodes.shift();
-        if (closestNode.isWall) continue;  // Might consider using minHeap for more efficiency
+        if (closestNode.isWall) continue;
         if (closestNode.distance === Infinity) return visitedNodesInOrder;
         closestNode.isVisited = true;
         visitedNodesInOrder.push(closestNode);
