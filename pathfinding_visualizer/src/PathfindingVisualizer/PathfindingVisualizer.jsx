@@ -83,6 +83,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
             animationTimeouts.current.push(setTimeout(() => {
                animateShortestPath(nodesInShortestPathOrder);
             }, 10 * i));
+            return;
          }
          animationTimeouts.current.push(setTimeout(() => {
             const node = visitedNodesInOrder[i];
@@ -91,6 +92,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
          }, 10 * i));
       }
    };
+
 
   const animateShortestPath = (nodesInShortestPathOrder) => {
       for (let i = 1; i < nodesInShortestPathOrder.length - 1; i++) {
@@ -175,17 +177,21 @@ const createNode = (row, col) => {
 const resetAllNodes = (grid) => {
    const newGrid = grid.map(row =>
       row.map(node => {
+
+         
          // Reset the node class in the DOM to remove animations
          const nodeElement = document.getElementById(`node-${node.row}-${node.col}`);
-         if (nodeElement) {
+         if (nodeElement && nodeElement.classList.contains("node-visited")) {
             nodeElement.className = 'node'; // Reset to default node class
          }
+         
 
          // Reset the node properties in the grid
          return {
             ...node,
             isVisited: false,
-            isWall: node.isWall, // Keep walls intact
+            //isWall: node.isWall, // Keep walls intact
+            isWall: false,
             isStart: node.isStart,
             isFinish: node.isFinish,
             distance: Infinity,
