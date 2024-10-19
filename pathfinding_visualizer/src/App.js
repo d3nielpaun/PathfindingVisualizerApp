@@ -14,14 +14,15 @@ const App = () => {
    };
 
    const onStartButtonClick = () => {
-      setResetGrid(false);
       setIsVisualizing(true);
+      setResetGrid(false);
    };
 
    const onResetButtonClick = () => {
       setResetGrid(true);
       setIsVisualizing(false);
    };
+
 
    return (
       <div className="App">

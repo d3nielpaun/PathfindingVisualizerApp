@@ -15,7 +15,6 @@ const FINISH_NODE_COL = 20;
 const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) => {
    const [grid, setGrid] = useState([]);
    const [mousePressed, setMousePressed] = useState(false);
-   const [isResetting, setIsResetting] = useState(false);
    const animationTimeouts = useRef([]);
 
 
@@ -26,29 +25,26 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
 
 
    useEffect(() => {
-      if (isVisualizing && !resetGrid) {
+      if (isVisualizing) {
          if (selectedAlgorithm === "Dijkstra") {
             visualizeDijkstra();
          }
       }
    }, [isVisualizing]);
 
-
    useEffect(() => {
-      if (resetGrid && !isVisualizing) {
+      if (resetGrid) {
          clearTimeouts();
-         const newGrid = resetAllNodes(grid);
-         console.log(newGrid);
-         setGrid(newGrid); // Update the grid with reset nodes
-         setIsResetting(false);
+         const newGrid = resetAllNodes(grid); // Reset node properties and DOM elements
+         setGrid(newGrid); // Update the grid with the reset nodes
       }
    }, [resetGrid]);
 
+   
 
    const clearTimeouts = () => {
       animationTimeouts.current.forEach(timeout => clearTimeout(timeout));
       animationTimeouts.current = [];
-      setIsResetting(true);
    };
 
 
@@ -57,14 +53,14 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
       if (isVisualizing) return;
       setMousePressed(true);
       const node = grid[row][col];
-      node.isWall = !node.isWall; // Mutate grid directly
+      node.isWall = !node.isWall;
       setGrid([...grid]); // Trigger re-render with a new reference to the grid array
    };
    
    const handleMouseEnter = (row, col) => {
       if (mousePressed) {
          const node = grid[row][col];
-         node.isWall = !node.isWall; // Mutate grid directly
+         node.isWall = !node.isWall;
          setGrid([...grid]); // Trigger re-render with a new reference to the grid array
       }
    };
@@ -84,28 +80,27 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
       for (let i = 1; i < visitedNodesInOrder.length; i++) {
          const node = visitedNodesInOrder[i];
          if (node.isFinish) {
-            setTimeout(() => {
+            animationTimeouts.current.push(setTimeout(() => {
                animateShortestPath(nodesInShortestPathOrder);
-            }, 10 * i);
-            return;
+            }, 10 * i));
          }
-         setTimeout(() => {
+         animationTimeouts.current.push(setTimeout(() => {
             const node = visitedNodesInOrder[i];
             document.getElementById(`node-${node.row}-${node.col}`).className =
-            'node node-visited';
-         }, 10 * i);
+               'node node-visited';
+         }, 10 * i));
       }
-  };
+   };
 
   const animateShortestPath = (nodesInShortestPathOrder) => {
       for (let i = 1; i < nodesInShortestPathOrder.length - 1; i++) {
-          setTimeout(() => {
-              const node = nodesInShortestPathOrder[i];
-              document.getElementById(`node-${node.row}-${node.col}`).className =
-              'node node-shortest-path';
-          }, 50 * i);
+         animationTimeouts.current.push(setTimeout(() => {
+            const node = nodesInShortestPathOrder[i];
+            document.getElementById(`node-${node.row}-${node.col}`).className =
+               'node node-shortest-path';
+         }, 50 * i));
       }
-  };   
+   };   
 
    
    const visualizeDijkstra = () => {
@@ -183,14 +178,14 @@ const resetAllNodes = (grid) => {
          // Reset the node class in the DOM to remove animations
          const nodeElement = document.getElementById(`node-${node.row}-${node.col}`);
          if (nodeElement) {
-            nodeElement.className = 'node';
+            nodeElement.className = 'node'; // Reset to default node class
          }
 
          // Reset the node properties in the grid
          return {
             ...node,
             isVisited: false,
-            isWall: node.isWall, // Walls stay the same
+            isWall: node.isWall, // Keep walls intact
             isStart: node.isStart,
             isFinish: node.isFinish,
             distance: Infinity,

@@ -4,23 +4,21 @@ import './Node.css';
 
 const Node = ({ row, col, isStart, isFinish, isWall, isVisited,
    onMouseDown, onMouseEnter, onMouseUp }) => {
-   const [nodeClass, setNodeClass] = useState('node');
 
-   useEffect(() => {
-      let newClass = 'node';
-      
-      if (isStart) {
-        newClass += ' node-start';
-      }
-      else if (isFinish) {
-         newClass += ' node-finish';
-      }
-      else if (isWall) {
-         newClass += ' node-wall';
-      }
-      if (isVisited) newClass += ' node-visited';
-      setNodeClass(newClass);
-   }, [isStart, isFinish, isWall, isVisited]);
+   let nodeClass = 'node';
+   
+   if (isStart) {
+      nodeClass += ' node-start';
+   }
+   else if (isFinish) {
+      nodeClass += ' node-finish';
+   }
+   else if (isWall) {
+      nodeClass += ' node-wall';
+   }
+   if (isVisited) {
+      nodeClass += ' node-visited';
+   }
 
    return (
       <div
