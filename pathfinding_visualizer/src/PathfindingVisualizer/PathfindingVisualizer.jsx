@@ -74,7 +74,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
       if (!mousePressed) return;
       const node = grid[row][col];
       if (movingStartNode) {
-         if (!node.isFinish) {
+         if (!node.isFinish && !node.isWall) {
             node.isStart = true;
             START_NODE_ROW = row;
             START_NODE_COL = col;
@@ -85,7 +85,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
          }
       }
       else if (movingFinishNode) {
-         if (!node.isStart) {
+         if (!node.isStart && !node.isWall) {
             node.isFinish = true;
             FINISH_NODE_ROW = row;
             FINISH_NODE_COL = col;
@@ -108,7 +108,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
       const node = grid[row][col];
    
       if (movingStartNode) {
-         if (!node.isFinish) { // Only unset if not leaving the finish node
+         if (!node.isFinish && !node.isWall) { // Only unset if not leaving the finish node
             node.isStart = false;
          }
          else {  // Leaving the finish node
@@ -117,7 +117,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
          }
       }
       else if (movingFinishNode) {
-         if (!node.isStart) {
+         if (!node.isStart && !node.isWall) {
             node.isFinish = false;
          }
          else {  // Leaving start node
