@@ -6,15 +6,17 @@ import './PathfindingVisualizer.css';
 // Initial global variables
 const NUM_OF_ROWS = 20;
 const NUM_OF_COLS = 50;
-const START_NODE_ROW = 9;
-const START_NODE_COL = 5;
-const FINISH_NODE_ROW = 9;
-const FINISH_NODE_COL = 20;
+let START_NODE_ROW = 9;
+let START_NODE_COL = 5;
+let FINISH_NODE_ROW = 9;
+let FINISH_NODE_COL = 20;
 
 
 const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) => {
    const [grid, setGrid] = useState([]);
    const [mousePressed, setMousePressed] = useState(false);
+   const [movingStartNode, setMovingStartNode] = useState(false);
+   const [movingFinishNode, setMovingFinishNode] = useState(false);
    const animationTimeouts = useRef([]);
 
 
@@ -32,6 +34,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
       }
    }, [isVisualizing]);
 
+
    useEffect(() => {
       if (resetGrid) {
          clearTimeouts();
@@ -41,39 +44,118 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
    }, [resetGrid]);
 
    
-
    const clearTimeouts = () => {
       animationTimeouts.current.forEach(timeout => clearTimeout(timeout));
       animationTimeouts.current = [];
    };
 
-
+   
    const handleMouseDown = (event, row, col) => {
-      event.preventDefault();
-      if (isVisualizing) return;
+      event.preventDefault();  // Prevents default drag-and-drop behavior of browser
+      if (isVisualizing) return;  // Doesn't allow grid-altering during animation
       setMousePressed(true);
       const node = grid[row][col];
-      node.isWall = !node.isWall;
+
+      if (node.isStart) {  // Clicking on the start node
+         setMovingStartNode(true);
+      }
+      else if (node.isFinish) {
+         setMovingFinishNode(true);
+      }
+      else {  // Clicking on default node
+         node.isWall = !node.isWall;
+      }
+
       setGrid([...grid]); // Trigger re-render with a new reference to the grid array
    };
    
+   
    const handleMouseEnter = (row, col) => {
-      if (mousePressed) {
-         const node = grid[row][col];
+      if (!mousePressed) return;
+      const node = grid[row][col];
+      if (movingStartNode) {
+         if (!node.isFinish) {
+            node.isStart = true;
+            START_NODE_ROW = row;
+            START_NODE_COL = col;
+         }
+         else {
+            const startNode = grid[START_NODE_ROW][START_NODE_COL];
+            startNode.isStart = true;
+         }
+      }
+      else if (movingFinishNode) {
+         if (!node.isStart) {
+            node.isFinish = true;
+            FINISH_NODE_ROW = row;
+            FINISH_NODE_COL = col;
+         }
+         else {
+            const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+            finishNode.isFinish = true;
+         }
+      }
+      else {
          node.isWall = !node.isWall;
-         setGrid([...grid]); // Trigger re-render with a new reference to the grid array
+      }
+
+      setGrid([...grid]); // Trigger re-render with a new reference to the grid array
+   };
+   
+   
+   const handleMouseLeaveNode = (row, col) => {
+      if (!mousePressed) return;
+      const node = grid[row][col];
+   
+      if (movingStartNode) {
+         if (!node.isFinish) { // Only unset if not leaving the finish node
+            node.isStart = false;
+         }
+         else {  // Leaving the finish node
+            const prevStartNode = grid[START_NODE_ROW][START_NODE_COL];
+            prevStartNode.isStart = false;
+         }
+      }
+      else if (movingFinishNode) {
+         if (!node.isStart) {
+            node.isFinish = false;
+         }
+         else {  // Leaving start node
+            const prevFinishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+            prevFinishNode.isFinish = false;
+         }
+      }
+      setGrid([...grid]); // Trigger re-render with a new reference to the grid array
+   };
+   
+
+   const handleMouseUp = (row, col) => {
+      setMousePressed(false);
+      if (movingStartNode) {
+         setMovingStartNode(false);
+      }
+      else if (movingFinishNode) {
+         setMovingFinishNode(false);
       }
    };
 
 
-   const handleMouseUp = () => {
+   const handleMouseLeaveGrid = () => {
       setMousePressed(false);
+      if (movingStartNode) {
+         setMovingStartNode(false);
+         const startNode = grid[START_NODE_ROW][START_NODE_COL];
+         startNode.isStart = true;
+         setGrid([...grid]);
+      }
+      else if (movingFinishNode) {
+         setMovingFinishNode(false);
+         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+         finishNode.isFinish = true;
+         setGrid([...grid]);
+      }
    };
-
-
-   const handleMouseLeave = () => {
-      setMousePressed(false);
-   };
+   
 
    
    const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
@@ -117,7 +199,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
    return (
       <div className="outer-grid-container">
          <div className="inner-grid-container">
-            <div className="grid" onMouseLeave={handleMouseLeave}>
+            <div className="grid" onMouseLeave={handleMouseLeaveGrid}>
                {grid.map((row, rowIdx) => (
                   <div key={rowIdx} id={rowIdx} className="row">
                      {row.map((node) => {
@@ -133,7 +215,8 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
                               isVisited={isVisited}
                               onMouseDown={(event) => handleMouseDown(event, row, col)}
                               onMouseEnter={() => handleMouseEnter(row, col)}
-                              onMouseUp={() => handleMouseUp()}>
+                              onMouseUp={() => handleMouseUp(row, col)}
+                              onMouseLeave={() => handleMouseLeaveNode(row, col)}>
                            </Node>
                         );
                      })}
@@ -174,18 +257,16 @@ const createNode = (row, col) => {
    };
 };
 
+
+
 const resetAllNodes = (grid) => {
    const newGrid = grid.map(row =>
       row.map(node => {
-
-         
          // Reset the node class in the DOM to remove animations
          const nodeElement = document.getElementById(`node-${node.row}-${node.col}`);
          if (nodeElement && nodeElement.classList.contains("node-visited")) {
             nodeElement.className = 'node'; // Reset to default node class
          }
-         
-
          // Reset the node properties in the grid
          return {
             ...node,

@@ -3,7 +3,7 @@ import './Node.css';
 
 
 const Node = ({ row, col, isStart, isFinish, isWall, isVisited,
-   onMouseDown, onMouseEnter, onMouseUp }) => {
+   onMouseDown, onMouseEnter, onMouseUp, onMouseLeave }) => {
 
    let nodeClass = 'node';
    
@@ -26,7 +26,8 @@ const Node = ({ row, col, isStart, isFinish, isWall, isVisited,
          className={nodeClass}
          onMouseDown={(event) => onMouseDown(event, row, col)}
          onMouseEnter={() => onMouseEnter(row, col)}
-         onMouseUp={() => onMouseUp()}>
+         onMouseUp={() => onMouseUp(row, col)}
+         onMouseLeave={() => onMouseLeave(row, col)}>
       </div>
    );
 };
