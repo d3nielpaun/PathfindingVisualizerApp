@@ -1,8 +1,8 @@
 :root {
     --background-color: rgb(216, 216, 216);
-    --node-border-color: black;
-    --outer-container-color: black;
-    --inner-container-color: rgb(185, 185, 185);
+    --node-border-color: rgb(80, 98, 132);
+    --outer-container-color: rgb(41, 47, 74);
+    --inner-container-color: rgb(80, 98, 132);
     --graph-color: rgb(217, 217, 217);
   }
 

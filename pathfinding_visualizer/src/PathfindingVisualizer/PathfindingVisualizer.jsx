@@ -9,7 +9,7 @@ const NUM_OF_COLS = 50;
 let START_NODE_ROW = 9;
 let START_NODE_COL = 5;
 let FINISH_NODE_ROW = 9;
-let FINISH_NODE_COL = 20;
+let FINISH_NODE_COL = 44;
 
 
 const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) => {

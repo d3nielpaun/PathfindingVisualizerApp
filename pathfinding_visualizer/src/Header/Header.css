@@ -1,6 +1,6 @@
 :root {
-    --header-color: rgb(66, 66, 66);
-    --secondary-header-color: black;
+    --header-color: rgb(80, 98, 132);
+    --secondary-header-color: rgb(41, 47, 74);;
     --text-color: white;
     --button-color: black;
     --button-hover-color: rgb(55, 55, 55);
@@ -23,6 +23,7 @@
 
 .header-title {
     font-size: 2.2rem;
+    font-weight: bold;
     color: var(--text-color);
 }
 
@@ -40,11 +41,20 @@
 }
 
 .dropdown {
-    width: 95px;
+    width: auto;
+    height: auto;
+    padding: 5px;
+    /*
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.4rem;
+    */
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--text-color);
+    background: var(--secondary-header-color);
+    border-radius: 10px;
+    border-color: var(--header-color);
 }
 
 .button-container {
