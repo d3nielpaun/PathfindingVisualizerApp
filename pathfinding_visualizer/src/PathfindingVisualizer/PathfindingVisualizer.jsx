@@ -28,7 +28,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
 
    useEffect(() => {
       if (isVisualizing) {
-         if (selectedAlgorithm === "Dijkstra") {
+         if (selectedAlgorithm === "Dijkstra's Algorithm") {
             visualizeDijkstra();
          }
       }

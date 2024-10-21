@@ -1,6 +1,7 @@
 :root {
     --header-color: rgb(80, 98, 132);
-    --secondary-header-color: rgb(41, 47, 74);;
+    --secondary-header-color: rgb(41, 47, 74);
+    --tertiary-header-color: rgb(21, 24, 37);
     --text-color: white;
     --button-color: black;
     --button-hover-color: rgb(55, 55, 55);
@@ -27,7 +28,8 @@
     color: var(--text-color);
 }
 
-.dropdown-container {
+.alg-dropdown-container {
+    width: auto;
     padding: 10px;
     border-radius: 10px;
     text-overflow: ellipsis;
@@ -41,7 +43,7 @@
 }
 
 .dropdown {
-    width: auto;
+    width: fit-content;
     height: auto;
     padding: 5px;
     /*
@@ -52,7 +54,7 @@
     font-size: 1.6rem;
     font-weight: bold;
     color: var(--text-color);
-    background: var(--secondary-header-color);
+    background: var(--tertiary-header-color);
     border-radius: 10px;
     border-color: var(--header-color);
 }
