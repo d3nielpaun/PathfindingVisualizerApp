@@ -1,7 +1,10 @@
 .alg-dropdown-container {
     display: flex;
     align-items: center;
+    height: 80%;
+    padding: 8px;
     background: var(--tertiary-header-color);
+    border-radius: 10px;
 }
 
 .alg-dropdown-container p {
@@ -17,45 +20,45 @@
 }
 
 .alg-dropdown-header {
-    background-color: var(--secondary-header-color);
-    padding: 10px;
-    border: 2px solid var(--header-color);
-    border-radius: 5px;
-    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: fit-content;
+    padding: 10px;
+    gap: 10px;
+    cursor: pointer;
+    background-color: var(--secondary-header-color);
+    border: 2px solid var(--header-color);
+    border-radius: 5px;
 }
 
-.arrow {
-    margin-left: 10px;
+.alg-dropdown-arrow {
     font-size: 12px;
 }
 
-.dropdown-list {
+.alg-dropdown-list {
     position: absolute;
-    top: 100%;
-    left: 0;
+    width: max-content;
+    margin-top: 4px;
+    list-style-type: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
     background-color: white;
     color: black;
     border: 2px solid var(--tertiary-header-color);
     border-radius: 5px;
-    width: 100%;
-    margin-top: 5px;
-    list-style-type: none;
-    padding: 0;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 100;
 }
 
-.dropdown-list-item {
+.alg-dropdown-list-item {
+    display: flex;
+    gap: 10px;
     padding: 10px;
     cursor: pointer;
     border-bottom: 2px solid var(--tertiary-header-color);
 }
 
-.dropdown-list-item:hover {
+.alg-dropdown-list-item:hover {
     background-color: var(--header-color);
     color: white;
 }

@@ -30,6 +30,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
       if (isVisualizing) {
          if (selectedAlgorithm === "Dijkstra's Algorithm") {
             visualizeDijkstra();
+            console.log(grid[FINISH_NODE_ROW][FINISH_NODE_COL]);
          }
       }
    }, [isVisualizing]);
@@ -95,7 +96,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
             finishNode.isFinish = true;
          }
       }
-      else {
+      else if (!node.isStart && !node.isFinish) {
          node.isWall = !node.isWall;
       }
 
@@ -271,10 +272,9 @@ const resetAllNodes = (grid) => {
          return {
             ...node,
             isVisited: false,
-            //isWall: node.isWall, // Keep walls intact
-            isWall: false,
             isStart: node.isStart,
             isFinish: node.isFinish,
+            isWall: node.isWall, // Keep walls intact
             distance: Infinity,
             previousNode: null,
          };

@@ -3,7 +3,7 @@
     --node-border-color: rgb(80, 98, 132);
     --outer-container-color: rgb(41, 47, 74);
     --inner-container-color: rgb(80, 98, 132);
-    --graph-color: rgb(227, 227, 227);
+    --grid-color: rgb(227, 227, 227);
   }
 
 .outer-grid-container {
@@ -16,7 +16,7 @@
 
 .inner-grid-container {
     background: var(--inner-container-color);
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
 }
 
@@ -26,7 +26,7 @@
     flex-direction: column;
     border-left: 1px solid var(--node-border-color);
     border-top: 1px solid var(--node-border-color);
-    background: var(--graph-color);
+    background: var(--grid-color);
 }
 
 .row {
