@@ -2,8 +2,8 @@
     --start-node-color: rgb(39, 185, 39);
     --finish-node-color: rgb(207, 39, 39);
     --wall-node-color: rgb(71, 71, 71);
-    --mud-node-color: brown;
-    --water-node-color: blue;
+    --mud-node-color: rgb(178, 117, 70);
+    --water-node-color: rgb(66, 104, 217);
     --visited-node-color: rgb(155, 222, 231);
     --shortest-path-node-color: rgb(231, 161, 155);
 }

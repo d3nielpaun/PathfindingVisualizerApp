@@ -16,7 +16,7 @@ const NodeDropdown = ({ nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWei
 		nodeType.weight = parseInt(weight);
 		onNodeWeightChange([...nodeTypes]);
 	}
-
+	
 
 	return (
 		<div className="node-dropdown-container">
