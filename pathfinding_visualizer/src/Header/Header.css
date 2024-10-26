@@ -37,15 +37,18 @@
 }
 
 .output-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     padding: 10px;
     flex-grow: 1;
-    max-width: 500px;
+    max-width: 700px;
     font-size: 1.4rem;
     background: var(--tertiary-header-color);
     border-radius: 5px;
+}
+
+.output-text {
+    padding: 10px;
+    background: var(--secondary-header0-color);
+    border: 2px solid red;
 }
 
 

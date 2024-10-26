@@ -28,7 +28,7 @@ const Header = ({ isVisualizing, algorithms, selectedAlgorithm, onAlgorithmChang
          )}
          {isVisualizing && (
             <div className="output-container">
-               <p id="output-text"></p>
+               <p className="output-text" id="output-text"></p>
             </div>
          )}
          <div className="button-container">

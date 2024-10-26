@@ -205,9 +205,13 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
    const visualizeDijkstra = () => {
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-      const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-      const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-      animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+      const dijkstraOutput = dijkstra(grid, startNode, finishNode);
+      const outputText = document.getElementById("output-text");
+      outputText.innerHTML = `Dijkstra's Algorithm: Visited: ${dijkstraOutput.numNodesVisited}, 
+                              ${dijkstraOutput.shortestPath === null ? "Could not find Finish Node" :
+                                 `Shortest Path Length: ${dijkstraOutput.shortestPathLength}, 
+                                 Total Distance: ${dijkstraOutput.totalDistance}`}`;
+      animateDijkstra(dijkstraOutput.visitedNodesInOrder, dijkstraOutput.shortestPath);
    };
 
 

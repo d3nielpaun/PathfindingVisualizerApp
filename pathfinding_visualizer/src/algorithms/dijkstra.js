@@ -4,17 +4,40 @@
 
 
 const dijkstra = (grid, startNode, finishNode) => {
+
     const visitedNodesInOrder = [];
     startNode.distance = 0;
     const unvisitedNodes = getAllNodes(grid);
+
     while (unvisitedNodes.length > 0) {
         sortNodesByDistance(unvisitedNodes);
         const closestNode = unvisitedNodes.shift();
         if (closestNode.type === "Wall") continue;
-        if (closestNode.distance === Infinity) return visitedNodesInOrder;
+        if (closestNode.distance === Infinity) {
+            const numNodesVisited = visitedNodesInOrder.length - 1;  // Excludes start node
+            return {
+                visitedNodesInOrder,
+                numNodesVisited,
+                shortestPath: null, // No path found
+                shortestPathLength: 0,
+                totalDistance: 0
+            };
+        }
         closestNode.isVisited = true;
         visitedNodesInOrder.push(closestNode);
-        if (closestNode === finishNode) return visitedNodesInOrder;
+        if (closestNode === finishNode) {
+            const shortestPath = getNodesInShortestPathOrder(finishNode);
+            const numNodesVisited = visitedNodesInOrder.length - 1;  // Excludes start node
+            const shortestPathLength = shortestPath.length - 2;  // Excludes start and finish node
+            const totalDistance = finishNode.distance; // Final distance is stored in finishNode
+            return {
+                visitedNodesInOrder,
+                numNodesVisited,
+                shortestPath,
+                shortestPathLength,
+                totalDistance
+            };
+        }
         updateUnvisitedNeighbors(closestNode, grid);
     }
 };
@@ -70,4 +93,4 @@ const getNodesInShortestPathOrder = (finishNode) => {
 };
 
 
-export { dijkstra, getNodesInShortestPathOrder };
+export { dijkstra };
