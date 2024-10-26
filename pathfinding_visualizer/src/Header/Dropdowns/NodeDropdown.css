@@ -119,6 +119,11 @@
     cursor: pointer;
 }
 
+.node-weight-slider::-webkit-slider-thumb:hover {
+    background: var(--accent-color);
+    border: 2px solid var(--tertiary-header-color);
+}
+
 .node-type {
     width: 22px;
     height: 22px;

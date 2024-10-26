@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Node.css';
 
 
-const Node = ({ row, col, isStart, isFinish, isWall, isVisited,
+const Node = ({ row, col, isStart, isFinish, type, isVisited,
    onMouseDown, onMouseEnter, onMouseUp, onMouseLeave }) => {
 
    let nodeClass = 'node';
@@ -13,9 +13,16 @@ const Node = ({ row, col, isStart, isFinish, isWall, isVisited,
    else if (isFinish) {
       nodeClass += ' node-finish';
    }
-   else if (isWall) {
+   else if (type === "Wall") {
       nodeClass += ' node-wall';
    }
+   else if (type === "Mud") {
+      nodeClass += ' node-mud';
+   }
+   else if (type === "Water") {
+      nodeClass += ' node-water'
+   }
+
    if (isVisited) {
       nodeClass += ' node-visited';
    }

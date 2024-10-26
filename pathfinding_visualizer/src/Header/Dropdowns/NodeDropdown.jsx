@@ -13,7 +13,7 @@ const NodeDropdown = ({ nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWei
 	};
 	
 	const handleWeightChange = (weight, nodeType) => {
-		nodeType.weight = weight;
+		nodeType.weight = parseInt(weight);
 		onNodeWeightChange([...nodeTypes]);
 	}
 
@@ -45,7 +45,7 @@ const NodeDropdown = ({ nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWei
 									<div className="weight-slider-container">
 										<label htmlFor={`${nodeType.name.toLowerCase()}-weight`}>{nodeType.weight}</label>
 										<input className="node-weight-slider" id={`${nodeType.name.toLowerCase()}-weight`}
-											type="range" min={0} max={100} step={1}  value={nodeType.weight}
+											type="range" min={1} max={100} step={1}  value={nodeType.weight}
 											onChange={(e) => handleWeightChange(e.target.value, nodeType)} />
 									</div>
 								)}

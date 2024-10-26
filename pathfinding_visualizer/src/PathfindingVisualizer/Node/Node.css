@@ -26,6 +26,14 @@
     background: var(--wall-node-color);
 }
 
+.node-mud {
+    background: var(--mud-node-color);
+}
+
+.node-water {
+    background: var(--water-node-color);
+}
+
 .node-visited {
     background: var(--visited-node-color);
 }

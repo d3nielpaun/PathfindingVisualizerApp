@@ -12,7 +12,7 @@ let FINISH_NODE_ROW = 9;
 let FINISH_NODE_COL = 44;
 
 
-const PathfindingVisualizer = ({ selectedAlgorithm, selectedNodeType, isVisualizing, resetGrid }) => {
+const PathfindingVisualizer = ({ selectedAlgorithm, nodeTypes, selectedNodeType, isVisualizing, resetGrid }) => {
    const [grid, setGrid] = useState([]);
    const [mousePressed, setMousePressed] = useState(false);
    const [movingStartNode, setMovingStartNode] = useState(false);
@@ -30,7 +30,8 @@ const PathfindingVisualizer = ({ selectedAlgorithm, selectedNodeType, isVisualiz
       if (isVisualizing) {
          if (selectedAlgorithm === "Dijkstra's Algorithm") {
             visualizeDijkstra();
-            console.log(grid[FINISH_NODE_ROW][FINISH_NODE_COL]);
+            console.log(nodeTypes);
+            console.log(grid[9][6]);
          }
       }
    }, [isVisualizing]);
@@ -64,9 +65,16 @@ const PathfindingVisualizer = ({ selectedAlgorithm, selectedNodeType, isVisualiz
          setMovingFinishNode(true);
       }
       else {  // Clicking on default node
-         if (selectedNodeType === "Wall") {
-            node.isWall = !node.isWall;
+         if (node.type === null) {
+            node.type = selectedNodeType;
+            const nodeType = nodeTypes.find((nodeType) => nodeType.name === selectedNodeType);
+            node.weight = nodeType.weight;
          }
+         else {
+            node.type = null;
+            node.weight = 1;
+         }
+
       }
 
       setGrid([...grid]); // Trigger re-render with a new reference to the grid array
@@ -99,7 +107,15 @@ const PathfindingVisualizer = ({ selectedAlgorithm, selectedNodeType, isVisualiz
          }
       }
       else if (!node.isStart && !node.isFinish) {
-         node.isWall = !node.isWall;
+         if (node.type === null) {
+            node.type = selectedNodeType;
+            const nodeType = nodeTypes.find((nodeType) => nodeType.name === selectedNodeType);
+            node.weight = nodeType.weight;
+         }
+         else {
+            node.type = null;
+            node.weight = 1;
+         }
       }
 
       setGrid([...grid]); // Trigger re-render with a new reference to the grid array
@@ -160,7 +176,6 @@ const PathfindingVisualizer = ({ selectedAlgorithm, selectedNodeType, isVisualiz
    };
    
 
-   
    const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
       for (let i = 1; i < visitedNodesInOrder.length; i++) {
          const node = visitedNodesInOrder[i];
@@ -206,7 +221,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, selectedNodeType, isVisualiz
                {grid.map((row, rowIdx) => (
                   <div key={rowIdx} id={rowIdx} className="row">
                      {row.map((node) => {
-                        const { row, col, isStart, isFinish, isWall, isVisited } = node;
+                        const { row, col, isStart, isFinish, type, isVisited } = node;
                         return (
                            <Node
                               key={`${row}-${col}`}
@@ -214,7 +229,7 @@ const PathfindingVisualizer = ({ selectedAlgorithm, selectedNodeType, isVisualiz
                               col={col}
                               isStart={isStart}
                               isFinish={isFinish}
-                              isWall={isWall}
+                              type={type}
                               isVisited={isVisited}
                               onMouseDown={(event) => handleMouseDown(event, row, col)}
                               onMouseEnter={() => handleMouseEnter(row, col)}
@@ -254,7 +269,8 @@ const createNode = (row, col) => {
       isStart: row === START_NODE_ROW && col === START_NODE_COL,
       isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
       distance: Infinity,
-      isWall: false,
+      type: null,
+      weight: 1,
       isVisited: false,
       previousNode: null,
    };
@@ -276,7 +292,8 @@ const resetAllNodes = (grid) => {
             isVisited: false,
             isStart: node.isStart,
             isFinish: node.isFinish,
-            isWall: node.isWall, // Keep walls intact
+            type: null,
+            weight: 1,
             distance: Infinity,
             previousNode: null,
          };

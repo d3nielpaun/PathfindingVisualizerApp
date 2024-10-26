@@ -64,6 +64,7 @@ const App = () => {
             </Header>
             <PathfindingVisualizer
                selectedAlgorithm={selectedAlgorithm}
+               nodeTypes={nodeTypes}
                selectedNodeType={selectedNodeType}
                isVisualizing={isVisualizing}
                resetGrid={resetGrid}>
