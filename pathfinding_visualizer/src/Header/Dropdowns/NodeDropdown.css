@@ -61,8 +61,6 @@
     width: max-content;
     margin-top: 4px;
     list-style-type: none;
-    max-height: 200px;
-    overflow-y: auto;
     z-index: 100;
     background-color: white;
     color: black;
@@ -140,4 +138,12 @@
 
 .water {
     background: var(--water-node-color);
+}
+
+.sand {
+    background: var(--sand-node-color);
+}
+
+.grass {
+    background: var(--grass-node-color);
 }

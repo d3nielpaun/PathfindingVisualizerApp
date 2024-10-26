@@ -14,12 +14,12 @@
     height: 80px;
     padding: 0 20px 0 20px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    gap: 10px;
     background: var(--header-color);
     color: var(--text-color);
-    font-size: 11px;
+    font-size: 1rem;
     font-family: Verdana, sans-serif;
 }
 
@@ -29,13 +29,33 @@
     color: var(--text-color);
 }
 
+.selection-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.output-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    flex-grow: 1;
+    max-width: 500px;
+    font-size: 1.4rem;
+    background: var(--tertiary-header-color);
+    border-radius: 5px;
+}
+
+
 .button-container {
     padding: 10px;
     display: flex;
     flex-direction: row;
     gap: 10px;
     align-items: center;
-    background: var(--secondary-header-color);
+    background: var(--tertiary-header-color);
     border-radius: 10px;
 }
 
@@ -45,23 +65,11 @@ button {
     border-radius: 10px;
     font-size: 1.5rem;
     font-weight: bold;
-    background: var(--button-color);
+    background: var(--secondary-header-color);
     color: var(--text-color);
-    border: 2px solid var(--start-button-border-color);
+    border: 2px solid var(--header-color);
 }
 
-.start-button {
-    border: 2px solid var(--start-button-border-color);
-}
-
-.start-button:hover {
-    background: var(--button-hover-color);
-}
-
-.reset-button {
-    border: 2px solid var(--reset-button-border-color);
-}
-
-.reset-button:hover {
-    background: var(--button-hover-color);
+button:hover {
+    border: 2px solid var(--accent-color);
 }

@@ -3,7 +3,7 @@ import './Header.css';
 import AlgDropdown from './Dropdowns/AlgDropdown'
 import NodeDropdown from './Dropdowns/NodeDropdown'
 
-const Header = ({ algorithms, selectedAlgorithm, onAlgorithmChange,
+const Header = ({ isVisualizing, algorithms, selectedAlgorithm, onAlgorithmChange,
    nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWeightChange,
    onStartButtonClick, onResetButtonClick }) => {
 
@@ -11,17 +11,26 @@ const Header = ({ algorithms, selectedAlgorithm, onAlgorithmChange,
    return (
       <div className="header-container">
          <header className="header-title">Pathfinding Visualizer</header>
-         <AlgDropdown
-            algorithms={algorithms}
-            selectedAlgorithm={selectedAlgorithm}
-            onAlgorithmChange={onAlgorithmChange}>
-         </AlgDropdown>
-         <NodeDropdown
-            nodeTypes={nodeTypes}
-            selectedNodeType={selectedNodeType}
-            onNodeTypeChange={onNodeTypeChange}
-            onNodeWeightChange={onNodeWeightChange}>
-         </NodeDropdown>
+         {!isVisualizing && (
+            <div className="selection-container">
+               <AlgDropdown
+                  algorithms={algorithms}
+                  selectedAlgorithm={selectedAlgorithm}
+                  onAlgorithmChange={onAlgorithmChange}>
+               </AlgDropdown>
+               <NodeDropdown
+                  nodeTypes={nodeTypes}
+                  selectedNodeType={selectedNodeType}
+                  onNodeTypeChange={onNodeTypeChange}
+                  onNodeWeightChange={onNodeWeightChange}>
+               </NodeDropdown>
+            </div>
+         )}
+         {isVisualizing && (
+            <div className="output-container">
+               <p id="output-text"></p>
+            </div>
+         )}
          <div className="button-container">
             <button className="start-button" onClick={onStartButtonClick}>Start</button>
             <button className="reset-button" onClick={onResetButtonClick}>Reset</button>

@@ -22,6 +22,13 @@ const Node = ({ row, col, isStart, isFinish, type, isVisited,
    else if (type === "Water") {
       nodeClass += ' node-water'
    }
+   else if (type === "Sand") {
+      nodeClass += ' node-sand'
+   }
+   else if (type === "Grass") {
+      nodeClass += ' node-grass'
+   }
+
 
    if (isVisited) {
       nodeClass += ' node-visited';

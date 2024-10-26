@@ -12,7 +12,8 @@ let FINISH_NODE_ROW = 9;
 let FINISH_NODE_COL = 44;
 
 
-const PathfindingVisualizer = ({ selectedAlgorithm, nodeTypes, selectedNodeType, isVisualizing, resetGrid }) => {
+const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
+   selectedAlgorithm, nodeTypes, selectedNodeType }) => {
    const [grid, setGrid] = useState([]);
    const [mousePressed, setMousePressed] = useState(false);
    const [movingStartNode, setMovingStartNode] = useState(false);
@@ -27,23 +28,21 @@ const PathfindingVisualizer = ({ selectedAlgorithm, nodeTypes, selectedNodeType,
 
 
    useEffect(() => {
-      if (isVisualizing) {
+      if (isVisualizing === true) {
          if (selectedAlgorithm === "Dijkstra's Algorithm") {
             visualizeDijkstra();
-            console.log(nodeTypes);
-            console.log(grid[9][6]);
          }
       }
    }, [isVisualizing]);
 
-
    useEffect(() => {
-      if (resetGrid) {
+      if (resetGrid !== null) {
          clearTimeouts();
          const newGrid = resetAllNodes(grid); // Reset node properties and DOM elements
          setGrid(newGrid); // Update the grid with the reset nodes
+         setIsVisualizing(false);
       }
-   }, [resetGrid]);
+   }, [resetGrid])
 
    
    const clearTimeouts = () => {
