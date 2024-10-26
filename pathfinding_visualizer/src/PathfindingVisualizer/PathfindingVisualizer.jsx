@@ -12,7 +12,7 @@ let FINISH_NODE_ROW = 9;
 let FINISH_NODE_COL = 44;
 
 
-const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) => {
+const PathfindingVisualizer = ({ selectedAlgorithm, selectedNodeType, isVisualizing, resetGrid }) => {
    const [grid, setGrid] = useState([]);
    const [mousePressed, setMousePressed] = useState(false);
    const [movingStartNode, setMovingStartNode] = useState(false);
@@ -64,7 +64,9 @@ const PathfindingVisualizer = ({ selectedAlgorithm, isVisualizing, resetGrid }) 
          setMovingFinishNode(true);
       }
       else {  // Clicking on default node
-         node.isWall = !node.isWall;
+         if (selectedNodeType === "Wall") {
+            node.isWall = !node.isWall;
+         }
       }
 
       setGrid([...grid]); // Trigger re-render with a new reference to the grid array

@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './AlgDropdown.css'
 
-const AlgDropdown = ({ onAlgorithmChange }) => {
+const AlgDropdown = ({ algorithms, selectedAlgorithm, onAlgorithmChange }) => {
     const [isOpen, setIsOpen] = useState(false);
-	const [selectedAlgorithm, setSelectedAlgorithm] = useState("Dijkstra's Algorithm");
-	
-	const algorithms = ["Dijkstra's Algorithm", "Breadth-first Search", "Depth-first Search"];
-
-	useEffect(() => {
-		onAlgorithmChange(selectedAlgorithm);
-	}, [selectedAlgorithm])
 
 	const toggleDropdown = () => setIsOpen(!isOpen);  // toggle dropdown
 	
     const handleOptionClick = (algorithm) => {
-        setSelectedAlgorithm(algorithm);
-        setIsOpen(false); // close dropdown after selection
+		setIsOpen(false);  // close dropdown after selection
+		onAlgorithmChange(algorithm);
     };
 
 	return (

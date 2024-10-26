@@ -3,16 +3,24 @@ import './Header.css';
 import AlgDropdown from './Dropdowns/AlgDropdown'
 import NodeDropdown from './Dropdowns/NodeDropdown'
 
-const Header = ({ onAlgorithmChange, onStartButtonClick, onResetButtonClick }) => {
+const Header = ({ algorithms, selectedAlgorithm, onAlgorithmChange,
+   nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWeightChange,
+   onStartButtonClick, onResetButtonClick }) => {
 
 
    return (
       <div className="header-container">
          <header className="header-title">Pathfinding Visualizer</header>
          <AlgDropdown
+            algorithms={algorithms}
+            selectedAlgorithm={selectedAlgorithm}
             onAlgorithmChange={onAlgorithmChange}>
          </AlgDropdown>
-         <NodeDropdown>
+         <NodeDropdown
+            nodeTypes={nodeTypes}
+            selectedNodeType={selectedNodeType}
+            onNodeTypeChange={onNodeTypeChange}
+            onNodeWeightChange={onNodeWeightChange}>
          </NodeDropdown>
          <div className="button-container">
             <button className="start-button" onClick={onStartButtonClick}>Start</button>

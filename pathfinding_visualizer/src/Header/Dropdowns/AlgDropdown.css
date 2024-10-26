@@ -32,6 +32,10 @@
     border-radius: 5px;
 }
 
+.alg-dropdown-header:hover {
+    border: 2px solid var(--accent-color);
+}
+
 .alg-dropdown-arrow {
     font-size: 12px;
 }
@@ -59,6 +63,5 @@
 }
 
 .alg-dropdown-list-item:hover {
-    background-color: var(--header-color);
-    color: white;
+    background-color: var(--accent-color);
 }

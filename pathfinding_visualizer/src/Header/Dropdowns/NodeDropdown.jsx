@@ -1,32 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './NodeDropdown.css'
 
 
-const NodeDropdown = ({  }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedNodeType, setSelectedNodeType] = useState("Wall");
+const NodeDropdown = ({ nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWeightChange }) => {
+	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleDropdown = () => setIsOpen(!isOpen);  // toggle dropdown
 	
-    const handleOptionClick = (nodeType) => {
-        setSelectedNodeType(nodeType.name);
-        setIsOpen(false); // close dropdown after selection
-    };
+	const handleOptionClick = (nodeType) => {
+		setIsOpen(false); // close dropdown after selection
+        onNodeTypeChange(nodeType.name);
+	};
+	
+	const handleWeightChange = (weight, nodeType) => {
+		nodeType.weight = weight;
+		onNodeWeightChange([...nodeTypes]);
+	}
 
-    const nodeTypes = [
-		{
-			name: "Wall",
-			weight: Infinity
-		},
-		{
-			name: "Mud",
-			weight: 80
-		},
-		{
-			name: "Water",
-			weight: 50
-		},
-	];
 
 	return (
 		<div className="node-dropdown-container">
@@ -46,12 +36,19 @@ const NodeDropdown = ({  }) => {
 						{nodeTypes.map((nodeType, index) => (
 							<li
 								key={index}
-								className="node-dropdown-list-item"
-								onClick={() => handleOptionClick(nodeType)}>
-								<div className={`node-type ${nodeType.name.toLowerCase()}`}></div>
-								{nodeType.name}
-								{nodeType.name !== "Wall" && (<input type="range" min="0" max="100" className="node-weight-slider"
-									value={nodeType.weight} />)}
+								className="node-dropdown-list-item">
+								<div className="node-name-container" onClick={() => handleOptionClick(nodeType)}>
+									<div className={`node-type ${nodeType.name.toLowerCase()}`}></div>
+									{nodeType.name}
+								</div>
+								{nodeType.name !== "Wall" && (
+									<div className="weight-slider-container">
+										<label htmlFor={`${nodeType.name.toLowerCase()}-weight`}>{nodeType.weight}</label>
+										<input className="node-weight-slider" id={`${nodeType.name.toLowerCase()}-weight`}
+											type="range" min={0} max={100} step={1}  value={nodeType.weight}
+											onChange={(e) => handleWeightChange(e.target.value, nodeType)} />
+									</div>
+								)}
 							</li>
 						))}
 					</ul>
