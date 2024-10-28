@@ -28,7 +28,7 @@ const dijkstra = (grid, startNode, finishNode) => {
         if (closestNode === finishNode) {
             const shortestPath = getNodesInShortestPathOrder(finishNode);
             const numNodesVisited = visitedNodesInOrder.length - 1;  // Excludes start node
-            const shortestPathLength = shortestPath.length - 2;  // Excludes start and finish node
+            const shortestPathLength = shortestPath.length - 1;  // Excludes start node
             const totalDistance = finishNode.distance; // Final distance is stored in finishNode
             return {
                 visitedNodesInOrder,

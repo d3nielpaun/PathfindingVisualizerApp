@@ -48,7 +48,7 @@
 .output-text {
     padding: 10px;
     background: var(--secondary-header0-color);
-    border: 2px solid red;
+    border: 2px solid var(--accent-color);
 }
 
 

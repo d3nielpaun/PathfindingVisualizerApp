@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Node.css';
 
 
-const Node = ({ row, col, isStart, isFinish, type, isVisited,
+const Node = ({ row, col, isStart, isFinish, type, isVisited, isShortestPath,
    onMouseDown, onMouseEnter, onMouseUp, onMouseLeave }) => {
 
    let nodeClass = 'node';

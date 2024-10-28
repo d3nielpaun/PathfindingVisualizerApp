@@ -42,7 +42,12 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
          setGrid(newGrid); // Update the grid with the reset nodes
          setIsVisualizing(false);
       }
-   }, [resetGrid])
+   }, [resetGrid]);
+
+
+   useEffect(() => {
+      updateWeights();
+   }, [nodeTypes]);
 
    
    const clearTimeouts = () => {
@@ -171,6 +176,18 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
          setGrid([...grid]);
       }
    };
+
+
+   const updateWeights = () => {
+      for (const row of grid) {
+         for (const node of row) {
+            if (node.type !== null) {
+               const nodeType = nodeTypes.find((nodeType) => nodeType.name === node.type);
+               node.weight = nodeType.weight;
+            }
+         }
+      }
+   };
    
 
    const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
@@ -184,19 +201,19 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
          }
          animationTimeouts.current.push(setTimeout(() => {
             const node = visitedNodesInOrder[i];
-            document.getElementById(`node-${node.row}-${node.col}`).className =
-               'node node-visited';
+            document.getElementById(`node-${node.row}-${node.col}`).className +=
+               ' node-visited';
          }, 10 * i));
       }
    };
 
 
-  const animateShortestPath = (nodesInShortestPathOrder) => {
+   const animateShortestPath = (nodesInShortestPathOrder) => {
       for (let i = 1; i < nodesInShortestPathOrder.length - 1; i++) {
          animationTimeouts.current.push(setTimeout(() => {
             const node = nodesInShortestPathOrder[i];
-            document.getElementById(`node-${node.row}-${node.col}`).className =
-               'node node-shortest-path';
+            document.getElementById(`node-${node.row}-${node.col}`).className +=
+               ' node node-shortest-path';
          }, 50 * i));
       }
    };   
@@ -207,10 +224,9 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const dijkstraOutput = dijkstra(grid, startNode, finishNode);
       const outputText = document.getElementById("output-text");
-      outputText.innerHTML = `Dijkstra's Algorithm: Visited: ${dijkstraOutput.numNodesVisited}, 
-                              ${dijkstraOutput.shortestPath === null ? "Could not find Finish Node" :
-                                 `Shortest Path Length: ${dijkstraOutput.shortestPathLength}, 
-                                 Total Distance: ${dijkstraOutput.totalDistance}`}`;
+      outputText.innerHTML = `Dijkstra's Algorithm visited ${dijkstraOutput.numNodesVisited} nodes. 
+                              ${dijkstraOutput.shortestPath === null ? "Could not find the finish node." :
+                                 `Shortest Path Length: ${dijkstraOutput.shortestPathLength}.`}`;
       animateDijkstra(dijkstraOutput.visitedNodesInOrder, dijkstraOutput.shortestPath);
    };
 
@@ -222,7 +238,7 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
                {grid.map((row, rowIdx) => (
                   <div key={rowIdx} id={rowIdx} className="row">
                      {row.map((node) => {
-                        const { row, col, isStart, isFinish, type, isVisited } = node;
+                        const { row, col, isStart, isFinish, type, isVisited, isShortestPath } = node;
                         return (
                            <Node
                               key={`${row}-${col}`}

@@ -2,18 +2,27 @@
     --start-node-color: rgb(39, 185, 39);
     --finish-node-color: rgb(207, 39, 39);
     --wall-node-color: rgb(71, 71, 71);
-    --mud-node-color: rgb(178, 117, 70);
-    --water-node-color: rgb(66, 104, 217);
-    --sand-node-color: rgb(227, 227, 112);
+    --mud-node-color: rgb(112, 84, 62);
+    --water-node-color: rgb(32, 64, 160);
+    --sand-node-color: rgb(203, 189, 147);
     --grass-node-color: rgb(51, 112, 51);
     --visited-node-color: rgb(155, 222, 231);
     --shortest-path-node-color: rgb(231, 161, 155);
+    --visited-mud-node-color: rgb(180, 106, 72);
+    --visited-water-node-color: rgb(66, 100, 223);
+    --visited-sand-node-color: rgb(233, 230, 100);
+    --visited-grass-node-color: rgb(65, 173, 65);
 }
 
 .node {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 27px;
     height: 27px;
+    background: var(--grid-color);
     border-right: 1px solid var(--node-border-color);
+    transition: background-color 0.2s;
 }
 
 .node-start {
@@ -49,5 +58,29 @@
 }
 
 .node-shortest-path {
-    background: var(--shortest-path-node-color);
+    border: 1px solid black;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.9); /* Glow effect */
+    animation: pulse 1s infinite; /* Pulse effect */
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.node-visited.node-mud {
+    background-color: var(--visited-mud-node-color);
+}
+
+.node-visited.node-water {
+    background-color: var(--visited-water-node-color);
+}
+
+.node-visited.node-sand {
+    background-color: var(--visited-sand-node-color);
+}
+
+.node-visited.node-grass {
+    background-color: var(--visited-grass-node-color);
 }
