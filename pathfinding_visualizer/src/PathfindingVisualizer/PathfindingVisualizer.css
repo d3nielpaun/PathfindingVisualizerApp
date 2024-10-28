@@ -1,6 +1,6 @@
 :root {
     --background-color: rgb(216, 216, 216);
-    --node-border-color: rgb(80, 98, 132);
+    --node-border-color: rgb(152, 167, 196);
     --outer-container-color: rgb(41, 47, 74);
     --inner-container-color: rgb(80, 98, 132);
     --grid-color: rgb(227, 227, 227);
@@ -26,6 +26,7 @@
     flex-direction: column;
     border-left: 1px solid var(--node-border-color);
     border-top: 1px solid var(--node-border-color);
+    background: var(--grid-color);
 }
 
 .row {

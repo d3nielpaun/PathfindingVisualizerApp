@@ -7,11 +7,11 @@
     --sand-node-color: rgb(203, 189, 147);
     --grass-node-color: rgb(51, 112, 51);
     --visited-node-color: rgb(155, 222, 231);
-    --shortest-path-node-color: rgb(231, 161, 155);
     --visited-mud-node-color: rgb(180, 106, 72);
     --visited-water-node-color: rgb(66, 100, 223);
     --visited-sand-node-color: rgb(233, 230, 100);
     --visited-grass-node-color: rgb(65, 173, 65);
+    --shortest-path-node-color: rgba(255, 0, 0, 0.641);
 }
 
 .node {
@@ -20,7 +20,6 @@
     justify-content: center;
     width: 27px;
     height: 27px;
-    background: var(--grid-color);
     border-right: 1px solid var(--node-border-color);
     transition: background-color 0.2s;
 }
@@ -59,8 +58,8 @@
 
 .node-shortest-path {
     border: 1px solid black;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.9); /* Glow effect */
-    animation: pulse 1s infinite; /* Pulse effect */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+    animation: pulse 1s infinite;
 }
 
 @keyframes pulse {
