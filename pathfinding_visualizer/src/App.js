@@ -30,8 +30,13 @@ const App = () => {
          name: "Grass",
          weight: 10,
       }
-
    ]);
+
+   const algorithms = [
+      "Dijkstra's Algorithm",
+      "Breadth-first Search",
+      "Depth-first Search"
+   ];
 
    const onAlgorithmChange = (algorithm) => {
       setSelectedAlgorithm(algorithm);
@@ -53,12 +58,6 @@ const App = () => {
       setResetGrid(prev => !prev);
       
    };
-
-   const algorithms = [
-      "Dijkstra's Algorithm",
-      "Breadth-first Search",
-      "Depth-first Search"
-   ];
 
    return (
       <div className="App">

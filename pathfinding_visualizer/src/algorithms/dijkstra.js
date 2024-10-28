@@ -3,6 +3,9 @@
  */
 
 
+
+
+
 const dijkstra = (grid, startNode, finishNode) => {
 
     const visitedNodesInOrder = [];
@@ -20,7 +23,6 @@ const dijkstra = (grid, startNode, finishNode) => {
                 numNodesVisited,
                 shortestPath: null, // No path found
                 shortestPathLength: 0,
-                totalDistance: 0
             };
         }
         closestNode.isVisited = true;
@@ -29,13 +31,11 @@ const dijkstra = (grid, startNode, finishNode) => {
             const shortestPath = getNodesInShortestPathOrder(finishNode);
             const numNodesVisited = visitedNodesInOrder.length - 1;  // Excludes start node
             const shortestPathLength = shortestPath.length - 1;  // Excludes start node
-            const totalDistance = finishNode.distance; // Final distance is stored in finishNode
             return {
                 visitedNodesInOrder,
                 numNodesVisited,
                 shortestPath,
                 shortestPathLength,
-                totalDistance
             };
         }
         updateUnvisitedNeighbors(closestNode, grid);

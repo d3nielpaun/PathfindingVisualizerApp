@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Node from './Node/Node';
-import { dijkstra, getNodesInShortestPathOrder } from '../algorithms/dijkstra';
+import { dijkstra } from '../algorithms/dijkstra';
+import { bfs } from '../algorithms/bfs';
 import './PathfindingVisualizer.css';
+
 
 // Initial global variables
 const NUM_OF_ROWS = 20;
@@ -31,6 +33,9 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
       if (isVisualizing === true) {
          if (selectedAlgorithm === "Dijkstra's Algorithm") {
             visualizeDijkstra();
+         }
+         else if (selectedAlgorithm === "Breadth-first Search") {
+            visualizeBFS();
          }
       }
    }, [isVisualizing]);
@@ -228,6 +233,13 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
                               ${dijkstraOutput.shortestPath === null ? "Could not find the finish node." :
                                  `Shortest Path Length: ${dijkstraOutput.shortestPathLength}.`}`;
       animateDijkstra(dijkstraOutput.visitedNodesInOrder, dijkstraOutput.shortestPath);
+   };
+
+
+   const visualizeBFS = () => {
+      const startNode = grid[START_NODE_ROW][START_NODE_COL];
+      const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+      const bfsOutput = bfs(grid, startNode, finishNode);
    };
 
 
