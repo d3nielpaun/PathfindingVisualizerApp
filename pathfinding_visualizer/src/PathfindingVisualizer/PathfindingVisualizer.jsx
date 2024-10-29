@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Node from './Node/Node';
 import { dijkstra } from '../algorithms/dijkstra';
 import { bfs } from '../algorithms/bfs';
+import { dfs } from '../algorithms/dfs';
 import './PathfindingVisualizer.css';
 
 
@@ -36,6 +37,9 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
          }
          else if (selectedAlgorithm === "Breadth-first Search") {
             visualizeBFS();
+         }
+         else if (selectedAlgorithm === "Depth-first Search") {
+            visualizeDFS();
          }
       }
    }, [isVisualizing]);
@@ -195,7 +199,7 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
    };
    
 
-   const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
+   const animateVisitedNodes = (visitedNodesInOrder, nodesInShortestPathOrder) => {
       for (let i = 1; i < visitedNodesInOrder.length; i++) {
          const node = visitedNodesInOrder[i];
          if (node.isFinish) {
@@ -214,7 +218,7 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
 
 
    const animateShortestPath = (nodesInShortestPathOrder) => {
-      for (let i = 1; i < nodesInShortestPathOrder.length - 1; i++) {
+      for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
          animationTimeouts.current.push(setTimeout(() => {
             const node = nodesInShortestPathOrder[i];
             document.getElementById(`node-${node.row}-${node.col}`).className +=
@@ -228,11 +232,15 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const dijkstraOutput = dijkstra(grid, startNode, finishNode);
+
       const outputText = document.getElementById("output-text");
-      outputText.innerHTML = `Dijkstra's Algorithm visited ${dijkstraOutput.numNodesVisited} nodes. 
-                              ${dijkstraOutput.shortestPath === null ? "Could not find the finish node." :
-                                 `Shortest Path Length: ${dijkstraOutput.shortestPathLength}.`}`;
-      animateDijkstra(dijkstraOutput.visitedNodesInOrder, dijkstraOutput.shortestPath);
+      outputText.innerHTML = `
+               Dijkstra's Algorithm visited ${dijkstraOutput.numNodesVisited} nodes. 
+               ${dijkstraOutput.shortestPath === null ? "Could not find the finish node." :
+               `Shortest Path Length: ${dijkstraOutput.shortestPathLength}.`}
+            `;
+      
+      animateVisitedNodes(dijkstraOutput.visitedNodesInOrder, dijkstraOutput.shortestPath);
    };
 
 
@@ -240,6 +248,27 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const bfsOutput = bfs(grid, startNode, finishNode);
+
+      const outputText = document.getElementById("output-text");
+      outputText.innerHTML = `Breadth-first Search visited ${bfsOutput.numNodesVisited} nodes. 
+      ${bfsOutput.shortestPath === null ? "Could not find the finish node." :
+            `Shortest Path Length: ${bfsOutput.shortestPathLength}.`}`;
+      
+      animateVisitedNodes(bfsOutput.visitedNodesInOrder, bfsOutput.shortestPath);
+   };
+
+
+   const visualizeDFS = () => {
+      const startNode = grid[START_NODE_ROW][START_NODE_COL];
+      const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+      const dfsOutput = dfs(grid, startNode, finishNode);
+
+      const outputText = document.getElementById("output-text");
+      outputText.innerHTML = `Depth-first Search visited ${dfsOutput.numNodesVisited} nodes. 
+      ${dfsOutput.shortestPath === null ? "Could not find the finish node." :
+            `Shortest Path Length: ${dfsOutput.shortestPathLength}.`}`;
+      
+      animateVisitedNodes(dfsOutput.visitedNodesInOrder, dfsOutput.shortestPath);
    };
 
 

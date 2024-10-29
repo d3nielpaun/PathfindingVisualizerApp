@@ -16,19 +16,19 @@ const App = () => {
       },
       {
          name: "Mud",
-         weight: 80
-      },
-      {
-         name: "Water",
          weight: 50
       },
       {
-         name: "Sand",
+         name: "Water",
          weight: 30
       },
       {
+         name: "Sand",
+         weight: 10
+      },
+      {
          name: "Grass",
-         weight: 10,
+         weight: 5,
       }
    ]);
 
