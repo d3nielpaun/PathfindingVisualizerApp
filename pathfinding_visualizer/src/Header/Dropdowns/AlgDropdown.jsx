@@ -2,7 +2,7 @@
  * Algorithm Dropdown component in Header
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './AlgDropdown.css'
 
 

@@ -67,7 +67,7 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
             visualizeDFS();
          }
       }
-   }, [isVisualizing]);
+   }, [isVisualizing, selectedAlgorithm]);
 
 
    /**
@@ -401,6 +401,7 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
       // Animates visualization
       animateVisitedNodes(dfsOutput.visitedNodesInOrder, dfsOutput.shortestPath);
    };
+
 
    // Returns React component representing grid
    return (
