@@ -3,12 +3,25 @@
  */
 
 
+/**
+ * Executed Breadth-first Search.
+ * Marks each visited node.
+ * 
+ * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes. 
+ * @param {Object} startNode - The node to start BFS from.
+ * @param {Object} finishNode - The target node to find in the grid.
+ * 
+ * @returns {Object} - Object holding statistics of BFS.
+ */
 const bfs = (grid, startNode, finishNode) => {
+
+    // Sets up BFS
     const visitedNodesInOrder = [];
     const queue = [];
     startNode.isVisited = true;
     queue.push(startNode);
 
+    // Executes BFS
     while (queue.length > 0) {
         const currentNode = queue.shift();
         visitedNodesInOrder.push(currentNode);
@@ -33,7 +46,7 @@ const bfs = (grid, startNode, finishNode) => {
         }
     }
 
-    // If we exit the loop without finding a path
+    // Finish node was not found
     return {
         visitedNodesInOrder,
         numNodesVisited: visitedNodesInOrder.length - 1,
@@ -42,6 +55,15 @@ const bfs = (grid, startNode, finishNode) => {
     };
 };
 
+
+/**
+ * Returns all neighbors of node that have yet to be visited.
+ * 
+ * @param {Object} node - The node to retrieve the neighbors for.
+ * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes.
+ * 
+ * @returns {Array<Object>} - Array of neighbors that haven't been visited.
+ */
 const getUnvisitedNeighbors = (node, grid) => {
     const neighbors = [];
     const { col, row } = node;
@@ -55,6 +77,14 @@ const getUnvisitedNeighbors = (node, grid) => {
     return neighbors.filter(neighbor => !neighbor.isVisited && neighbor.type !== "Wall");
 };
 
+
+/**
+ * Obtains all node objects that are a part of the shortest path by traversing from the finish node.
+ * 
+ * @param {Object} finishNode - The target node that was found by the algorithm.
+ * 
+ * @returns {Array<Object>} - An array of all nodes in the shortest path.
+ */
 const getNodesInShortestPathOrder = (finishNode) => {
     const nodesInShortestPathOrder = [];
     let currentNode = finishNode;

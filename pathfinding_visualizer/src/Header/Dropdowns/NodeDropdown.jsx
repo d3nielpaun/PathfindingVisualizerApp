@@ -1,23 +1,49 @@
+/*
+ * Node Type dropdown in Header
+ */
+
 import React, { useState } from 'react';
 import './NodeDropdown.css'
 
 
+/**
+ * 
+ * @param {Array<Object>} nodeTypes - List of node types with associated weights for the grid.
+ * @param {string} selectedNodeType - The currently selected node type.
+ * @param {function} onNodeTypeChange - Handler for updating the selected node type.
+ * @param {function} onNodeWeightChange - Handler for updating the weights of node types.
+ * 
+ * @returns {JSX.Element} - A dropdown for node type selection.
+ */
 const NodeDropdown = ({ nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWeightChange }) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);  // Boolean for if dropdown is open.
 
 	const toggleDropdown = () => setIsOpen(!isOpen);  // toggle dropdown
 	
+	/**
+	 * Handles node type selection.
+	 * 
+	 * @param {Object} nodeType - Node type that was selected by user.
+	 */
 	const handleOptionClick = (nodeType) => {
 		setIsOpen(false); // close dropdown after selection
         onNodeTypeChange(nodeType.name);
 	};
 	
+
+	/**
+	 * Handles node type weight change.
+	 * 
+	 * @param {number} weight - New weight of node type.
+	 * @param {*} nodeType - Node type whose weight was changed.
+	 */
 	const handleWeightChange = (weight, nodeType) => {
 		nodeType.weight = parseInt(weight);
 		onNodeWeightChange([...nodeTypes]);
 	}
 	
 
+	// Returns React component for node type dropdown
 	return (
 		<div className="node-dropdown-container">
 			<p>Node Type:</p>

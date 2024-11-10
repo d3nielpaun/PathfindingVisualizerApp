@@ -1,3 +1,8 @@
+/*
+ * Manages grid display.
+ * Controls algorithm execution and animation.
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import Node from './Node/Node';
 import { dijkstra } from '../algorithms/dijkstra';
@@ -14,23 +19,43 @@ let START_NODE_COL = 5;
 let FINISH_NODE_ROW = 9;
 let FINISH_NODE_COL = 44;
 
-
+/**
+ * Manages the grid and controls the execution of pathfinding algorithm animations.
+ * Handles user interaction with the grid.
+ * 
+ * @param {boolean} isVisualizing - Indicates if algorithm is currently being visualized.
+ * @param {function} setIsVisualizing - Function to update 'isVisualizing' state.
+ * @param {boolean} resetGrid - Indicates to reset the grid when it is changed.
+ * @param {String} selectedAlgorithm - Indicates which algorithm user has selected to visualize.
+ * @param {Array<Object>} nodeTypes - List of objects representing each node type.
+ * @param {String} selectedNodeType - Indicates which node type user currently has selected.
+ *  
+ * @returns {JSX.Element} - React component representing the grid.
+ */
 const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
    selectedAlgorithm, nodeTypes, selectedNodeType }) => {
-   const [grid, setGrid] = useState([]);
-   const [mousePressed, setMousePressed] = useState(false);
-   const [movingStartNode, setMovingStartNode] = useState(false);
-   const [movingFinishNode, setMovingFinishNode] = useState(false);
-   const animationTimeouts = useRef([]);
+   const [grid, setGrid] = useState([]);  // 2D array that holds Node objects
+   const [mousePressed, setMousePressed] = useState(false);  // Tracks when mouse is pressed down and held
+   const [movingStartNode, setMovingStartNode] = useState(false);  // Tracks if user is moving start node
+   const [movingFinishNode, setMovingFinishNode] = useState(false);  // Tracks if user is moving finish node
+   const animationTimeouts = useRef([]);  // Stores the animation timeouts for animation
 
 
+   /**
+    * Initializes grid when the component mounts.
+    * Runs only once on app start.
+    */
    useEffect(() => {
       const initialGrid = initializeGrid();
       setGrid(initialGrid);
    }, []);
 
 
+   /**
+    * Initiates algorithm visualization when isVisualizing is true.
+    */
    useEffect(() => {
+      // Determines which algorithm to visualize
       if (isVisualizing === true) {
          if (selectedAlgorithm === "Dijkstra's Algorithm") {
             visualizeDijkstra();
@@ -44,6 +69,10 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
       }
    }, [isVisualizing]);
 
+
+   /**
+    * Resets grid whenever resetGrid is toggled.
+    */
    useEffect(() => {
       if (resetGrid !== null) {
          clearTimeouts();
@@ -54,17 +83,36 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
    }, [resetGrid]);
 
 
+   /**
+    * Updates node type weights whenever nodeTypes is updated/changed.
+    */
    useEffect(() => {
       updateWeights();
    }, [nodeTypes]);
 
    
+   /**
+    * Clears animation timeouts.
+    * Called when user resets grid.
+    */
    const clearTimeouts = () => {
       animationTimeouts.current.forEach(timeout => clearTimeout(timeout));
       animationTimeouts.current = [];
    };
 
    
+   /**
+    * Handles the mouse down event on a grid node.
+    * If user presses on start node, sets movingStartNode to true.
+    * If user presses on finish node, sets movingFinishNode to true.
+    * Else, changes the node's type to the users selected node type.
+    * 
+    * @param {MouseEvent} event - The mouse event trigged by user interaction with grid.
+    * @param {number} row - The row index of node that was pressed.
+    * @param {number} col - The column index of the node that was pressed.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const handleMouseDown = (event, row, col) => {
       event.preventDefault();  // Prevents default drag-and-drop behavior of browser
       if (isVisualizing) return;  // Doesn't allow grid-altering during animation
@@ -74,41 +122,53 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
       if (node.isStart) {  // Clicking on the start node
          setMovingStartNode(true);
       }
-      else if (node.isFinish) {
+      else if (node.isFinish) {  // Clicking on finish node
          setMovingFinishNode(true);
       }
-      else {  // Clicking on default node
-         if (node.type === null) {
+      else {
+         if (node.type === null) {  // Clicking on default node -> sets type and weight to match selected node type
             node.type = selectedNodeType;
             const nodeType = nodeTypes.find((nodeType) => nodeType.name === selectedNodeType);
             node.weight = nodeType.weight;
          }
-         else {
+         else {  // Clicking on node with a type -> resets node to default
             node.type = null;
             node.weight = 1;
          }
-
       }
+
       setGrid([...grid]); // Trigger re-render with a new reference to the grid array
    };
    
    
+   /**
+    * Handles the mouse enter event on a grid node.
+    * When user drags mouse into node, proper action is carried out (move start/finish node, set node type).
+    * 
+    * @param {number} row - The row index of node that was pressed.
+    * @param {number} col - The column index of the node that was pressed.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const handleMouseEnter = (row, col) => {
-      if (!mousePressed) return;
+      if (!mousePressed) return;  // Does nothing if mouse is not pressed
+
       const node = grid[row][col];
+
+      // Carries out appropriate action for each scenario
       if (movingStartNode) {
-         if (!node.isFinish && !node.type) {
+         if (!node.isFinish && !node.type) {  // Prevents drag overtop of finish or non-default nodes
             node.isStart = true;
             START_NODE_ROW = row;
             START_NODE_COL = col;
          }
-         else {
+         else { 
             const startNode = grid[START_NODE_ROW][START_NODE_COL];
             startNode.isStart = true;
          }
       }
       else if (movingFinishNode) {
-         if (!node.isStart && !node.type) {
+         if (!node.isStart && !node.type) {  // Prevents drag overtop of start or non-default nodes
             node.isFinish = true;
             FINISH_NODE_ROW = row;
             FINISH_NODE_COL = col;
@@ -118,7 +178,7 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
             finishNode.isFinish = true;
          }
       }
-      else if (!node.isStart && !node.isFinish) {
+      else {  // Changing type of node
          if (node.type === null) {
             node.type = selectedNodeType;
             const nodeType = nodeTypes.find((nodeType) => nodeType.name === selectedNodeType);
@@ -129,37 +189,56 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
             node.weight = 1;
          }
       }
+
       setGrid([...grid]); // Trigger re-render with a new reference to the grid array
    };
    
    
+   /**
+    * Handles mouse leave event on a grid node.
+    * Used for when user is moving start or finish node.
+    * 
+    * @param {number} row - The row index of node that was pressed.
+    * @param {number} col - The column index of the node that was pressed.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const handleMouseLeaveNode = (row, col) => {
-      if (!mousePressed) return;
+      if (!mousePressed) return;  // Does nothing if mouse is not pressed
+
       const node = grid[row][col];
    
+      // Carries out appropriate action
       if (movingStartNode) {
-         if (!node.isFinish && !node.type) { // Only unset if not leaving the finish node
+         if (!node.isFinish && !node.type) { // Only unset start if not leaving special node
             node.isStart = false;
          }
-         else {  // Leaving the finish node
+         else {
             const prevStartNode = grid[START_NODE_ROW][START_NODE_COL];
             prevStartNode.isStart = false;
          }
       }
       else if (movingFinishNode) {
-         if (!node.isStart && !node.type) {
+         if (!node.isStart && !node.type) {  // Only unset finish if not leaving special node
             node.isFinish = false;
          }
-         else {  // Leaving start node
+         else {
             const prevFinishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
             prevFinishNode.isFinish = false;
          }
       }
+
       setGrid([...grid]); // Trigger re-render with a new reference to the grid array
    };
    
 
-   const handleMouseUp = (row, col) => {
+   /**
+    * Handles mouse up event on a grid node.
+    * Resets all mouse trackers.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
+   const handleMouseUp = () => {
       setMousePressed(false);
       if (movingStartNode) {
          setMovingStartNode(false);
@@ -170,6 +249,13 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
    };
 
 
+   /**
+    * Handles mouse leave event for entire grid.
+    * Resets mouse trackers.
+    * Sets start/finish node to last node that was pressed.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const handleMouseLeaveGrid = () => {
       setMousePressed(false);
       if (movingStartNode) {
@@ -187,6 +273,11 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
    };
 
 
+   /**
+    * Updates the weights of each type node when nodeTypes is changed.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const updateWeights = () => {
       for (const row of grid) {
          for (const node of row) {
@@ -199,6 +290,14 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
    };
    
 
+   /**
+    * Animates the visited nodes on the grid by changing DOM node className.
+    * 
+    * @param {Array<Node>} visitedNodesInOrder - Array of nodes that were visited in order.
+    * @param {Array<Node>} nodesInShortestPathOrder - Array of nodes that are in the shortest path.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const animateVisitedNodes = (visitedNodesInOrder, nodesInShortestPathOrder) => {
       for (let i = 1; i < visitedNodesInOrder.length; i++) {
          const node = visitedNodesInOrder[i];
@@ -217,6 +316,11 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
    };
 
 
+   /**
+    * Animates nodes in shortest path by changing DOM node elements className
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const animateShortestPath = (nodesInShortestPathOrder) => {
       for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
          animationTimeouts.current.push(setTimeout(() => {
@@ -228,11 +332,19 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
    };   
 
    
+   /**
+    * Handles the visualization of Dijkstra's Algorithm.
+    * Formats output for Dijkstra's Algorithm.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const visualizeDijkstra = () => {
+      // Calls dijkstra.js
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const dijkstraOutput = dijkstra(grid, startNode, finishNode);
-
+      
+      // Formats and displays output
       const outputText = document.getElementById("output-text");
       outputText.innerHTML = `
                Dijkstra's Algorithm visited ${dijkstraOutput.numNodesVisited} nodes. 
@@ -240,38 +352,57 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
                `Shortest Path Length: ${dijkstraOutput.shortestPathLength}.`}
             `;
       
+      // Animates visualization
       animateVisitedNodes(dijkstraOutput.visitedNodesInOrder, dijkstraOutput.shortestPath);
    };
 
 
+   /**
+    * Handles the visualization of Breadth-first Search.
+    * Formats output for Breadth-first Search.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const visualizeBFS = () => {
+      // Calls bfs.js
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const bfsOutput = bfs(grid, startNode, finishNode);
 
+      // Formats and displays output
       const outputText = document.getElementById("output-text");
       outputText.innerHTML = `Breadth-first Search visited ${bfsOutput.numNodesVisited} nodes. 
       ${bfsOutput.shortestPath === null ? "Could not find the finish node." :
             `Shortest Path Length: ${bfsOutput.shortestPathLength}.`}`;
       
+      // Animates visualization
       animateVisitedNodes(bfsOutput.visitedNodesInOrder, bfsOutput.shortestPath);
    };
 
 
+   /**
+    * Handles the visualization of Depth-first Search.
+    * Formats output for Depth-first Search.
+    * 
+    * @returns {void} - Doesn't return anything.
+    */
    const visualizeDFS = () => {
+      // Calls dfs.js
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const dfsOutput = dfs(grid, startNode, finishNode);
 
+      // Formats output
       const outputText = document.getElementById("output-text");
       outputText.innerHTML = `Depth-first Search visited ${dfsOutput.numNodesVisited} nodes. 
       ${dfsOutput.shortestPath === null ? "Could not find the finish node." :
             `Shortest Path Length: ${dfsOutput.shortestPathLength}.`}`;
       
+      // Animates visualization
       animateVisitedNodes(dfsOutput.visitedNodesInOrder, dfsOutput.shortestPath);
    };
 
-
+   // Returns React component representing grid
    return (
       <div className="outer-grid-container">
          <div className="inner-grid-container">
@@ -279,7 +410,7 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
                {grid.map((row, rowIdx) => (
                   <div key={rowIdx} id={rowIdx} className="row">
                      {row.map((node) => {
-                        const { row, col, isStart, isFinish, type, isVisited, isShortestPath } = node;
+                        const { row, col, isStart, isFinish, type, isVisited } = node;
                         return (
                            <Node
                               key={`${row}-${col}`}
@@ -291,7 +422,7 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
                               isVisited={isVisited}
                               onMouseDown={(event) => handleMouseDown(event, row, col)}
                               onMouseEnter={() => handleMouseEnter(row, col)}
-                              onMouseUp={() => handleMouseUp(row, col)}
+                              onMouseUp={() => handleMouseUp()}
                               onMouseLeave={() => handleMouseLeaveNode(row, col)}>
                            </Node>
                         );
@@ -305,7 +436,11 @@ const PathfindingVisualizer = ({ isVisualizing, setIsVisualizing, resetGrid,
 };
 
 
-// Function to initialize a new grid
+/**
+ * Creates a 2D array of default Objects that represent nodes in the grid.
+ * 
+ * @returns {Array<Array<Object>>} - 2D Array of Objects representing nodes.
+ */
 const initializeGrid = () => {
    const initialGrid = [];
    for (let row = 0; row < NUM_OF_ROWS; row++) {
@@ -319,7 +454,13 @@ const initializeGrid = () => {
 };
 
 
-// Function to create a new node
+/**
+ * Creates an object representing a node in the grid.
+ * 
+ * @param {number} row - The row index of the node.
+ * @param {number} col - The column index of the node.
+ * @returns {Object} - Object representing a node.
+ */
 const createNode = (row, col) => {
    return {
       row,
@@ -335,7 +476,13 @@ const createNode = (row, col) => {
 };
 
 
-
+/**
+ * Resets all nodes to their default state.
+ * 
+ * @param {Array<Array<Object>>} grid - The grid to reset.
+ * 
+ * @returns {Array<Array<Object>>} - A new grid that is reset.
+ */
 const resetAllNodes = (grid) => {
    const newGrid = grid.map(row =>
       row.map(node => {
@@ -359,7 +506,6 @@ const resetAllNodes = (grid) => {
    );
    return newGrid;
 };
-
 
 
 export default PathfindingVisualizer;

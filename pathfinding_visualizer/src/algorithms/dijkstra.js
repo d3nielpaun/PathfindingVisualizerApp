@@ -1,18 +1,24 @@
 /*
- * Implements Dijkstra's Algorithm using Min-Heap
+ * Implements Dijkstra's Algorithm using MinHeap
  */
 
 
+/**
+ * MinHeap class used for Dijkstra's Algorithm
+ */
 class MinHeap {
+
     constructor() {
         this.nodes = [];
     }
 
+    // Inserts a node into the MinHeap and ensures the heap property is maintained
     insert(node) {
         this.nodes.push(node);
         this.bubbleUp();
     }
 
+    // Extracts and returns the minimum node from the MinHeap
     extractMin() {
         if (this.nodes.length === 0) return null;
         const minNode = this.nodes[0];
@@ -24,6 +30,7 @@ class MinHeap {
         return minNode;
     }
 
+    // Moves the last node up the heap to restore the heap property
     bubbleUp() {
         let index = this.nodes.length - 1;
         const element = this.nodes[index];
@@ -37,6 +44,7 @@ class MinHeap {
         this.nodes[index] = element;
     }
 
+    // Moves the root node down the heap to restore the heap property
     bubbleDown() {
         let index = 0;
         const length = this.nodes.length;
@@ -69,25 +77,38 @@ class MinHeap {
         this.nodes[index] = element;
     }
 
+    // Checks if the heap is empty
     isEmpty() {
         return this.nodes.length === 0;
     }
 }
 
 
+/**
+ * Uses MinHeap to execute Dijkstra's Algorithm.
+ * Marks each visited node.
+ * 
+ * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes. 
+ * @param {Object} startNode - The node to start Dijkstra's Search from.
+ * @param {Object} finishNode - The target node to find in the grid.
+ * 
+ * @returns {Object} - Object holding statistics of Dijkstra's Algorithm.
+ */
 const dijkstra = (grid, startNode, finishNode) => {
+
+    // Sets up Dijkstra's Algorithm
     const visitedNodesInOrder = [];
     startNode.distance = 0;
-    
     const minHeap = new MinHeap();
     minHeap.insert(startNode);
 
+    // Runs Dijkstra's Algorithm
     while (!minHeap.isEmpty()) {
         const closestNode = minHeap.extractMin();
         closestNode.isVisited = true;
         visitedNodesInOrder.push(closestNode);
 
-        if (closestNode === finishNode) {
+        if (closestNode === finishNode) {  // Finish node was found
             const shortestPath = getNodesInShortestPathOrder(finishNode);
             return {
                 visitedNodesInOrder,
@@ -100,6 +121,7 @@ const dijkstra = (grid, startNode, finishNode) => {
         updateUnvisitedNeighbors(closestNode, grid, minHeap);
     }
 
+    // Finish node could not be found
     return {
         visitedNodesInOrder,
         numNodesVisited: visitedNodesInOrder.length - 1,
@@ -109,6 +131,16 @@ const dijkstra = (grid, startNode, finishNode) => {
 };
 
 
+/**
+ * Calculates distance of neighbors of a node.
+ * Places neighbors in MinHeap.
+ * 
+ * @param {Object} node - The node to retrieve and calculate distance of neighbors for.
+ * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes.
+ * @param {MinHeap} minHeap - MinHeap used to store nodes to be visited.
+ * 
+ * @returns {void} - Doesn't return anything.
+ */
 const updateUnvisitedNeighbors = (node, grid, minHeap) => {
     const unvisitedNeighbors = getUnvisitedNeighbors(node, grid);
 
@@ -123,6 +155,14 @@ const updateUnvisitedNeighbors = (node, grid, minHeap) => {
 };
 
 
+/**
+ * Returns all neighbors of node that have yet to be visited.
+ * 
+ * @param {Object} node - The node to retrieve the neighbors for.
+ * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes.
+ * 
+ * @returns {Array<Object>} - Array of neighbors that haven't been visited.
+ */
 const getUnvisitedNeighbors = (node, grid) => {
     const neighbors = [];
     const {col, row} = node;
@@ -134,6 +174,13 @@ const getUnvisitedNeighbors = (node, grid) => {
 };
 
 
+/**
+ * Obtains all node objects that are a part of the shortest path by traversing from the finish node.
+ * 
+ * @param {Object} finishNode - The target node that was found by the algorithm.
+ * 
+ * @returns {Array<Object>} - An array of all nodes in the shortest path.
+ */
 const getNodesInShortestPathOrder = (finishNode) => {
     const nodesInShortestPathOrder = [];
     let currentNode = finishNode;
