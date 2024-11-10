@@ -75,6 +75,11 @@ const NodeDropdown = ({ nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWei
 											onChange={(e) => handleWeightChange(e.target.value, nodeType)} />
 									</div>
 								)}
+								{nodeType.name === "Wall" && (
+									<div className="weights-label-container">
+										<p>Weights:</p>
+									</div>
+								)}
 							</li>
 						))}
 					</ul>

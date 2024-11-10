@@ -87,6 +87,16 @@
     background-color: var(--accent-color);
 }
 
+.weights-label-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    background: var(--secondary-header-color);
+    border-left: 2px solid var(--header-color);
+    color: white;
+}
+
 .weight-slider-container {
     display: flex;
     flex-direction: row-reverse;
