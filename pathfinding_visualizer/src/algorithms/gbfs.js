@@ -1,11 +1,11 @@
 /*
- * Implements Dijkstra's Algorithm using MinHeap
- */
+Implements Greedy Best-First search algorithm
+*/
 
 import { Heap } from 'heap-js';
 
 /**
- * Uses MinHeap to execute Dijkstra's Algorithm.
+ * Uses MinHeap to execute Greedy Best-First search algorithm Algorithm.
  * Marks each visited node.
  * 
  * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes. 
@@ -14,15 +14,17 @@ import { Heap } from 'heap-js';
  * 
  * @returns {Object} - Object holding statistics of Dijkstra's Algorithm.
  */
-const dijkstra = (grid, startNode, finishNode) => {
+const gbfs = (grid, startNode, finishNode) => {
     const visitedNodesInOrder = [];
-    startNode.f = 0;
+    startNode.h = manhattanDistance(startNode, finishNode);
+    startNode.f = startNode.h;
     const openList = new Heap((a, b) => a.f - b.f);
     openList.push(startNode);
 
     while (!openList.isEmpty()) {
         const current = openList.pop();
         if (current.isVisited) continue;
+
         current.isVisited = true;
         visitedNodesInOrder.push(current);
 
@@ -39,9 +41,9 @@ const dijkstra = (grid, startNode, finishNode) => {
         const neighbors = getValidNeighbors(current, grid);
 
         for (const neighbor of neighbors) {
-            const newF = current.f + neighbor.weight;
-            if (newF < neighbor.f) {
-                neighbor.f = newF;
+            if (!neighbor.isVisited) {
+                neighbor.h = manhattanDistance(neighbor, finishNode);
+                neighbor.f = neighbor.h; // Only heuristic in GBFS
                 neighbor.previousNode = current;
                 openList.push(neighbor);
             }
@@ -75,6 +77,9 @@ const getValidNeighbors = (node, grid) => {
     return neighbors.filter(neighbor => !neighbor.isVisited && neighbor.weight !== Infinity);
 };
 
+const manhattanDistance = (node1, node2) => {
+    return Math.abs(node1.row - node2.row) + Math.abs(node1.col - node2.col);
+};
 
 /**
  * Obtains all node objects that are a part of the shortest path by traversing from the finish node.
@@ -94,4 +99,4 @@ const getNodesInShortestPathOrder = (finishNode) => {
 };
 
 
-export { dijkstra };
+export { gbfs };

@@ -4,63 +4,80 @@
  */
 
 import './Header.css';
+import { FaPlay, FaPause, FaRedo, FaStepForward } from 'react-icons/fa';
 import AlgDropdown from './Dropdowns/AlgDropdown'
 import NodeDropdown from './Dropdowns/NodeDropdown'
+import ResetDropdown from './Dropdowns/ResetDropdown'
 
 /**
  * The Header component for the pathfinding visualizer. 
  * It provides user controls for selecting the pathfinding algorithm, node types, and 
  * starting or resetting the algorithm visualization.
- * 
- * @param {boolean} isVisualizing - Indicates if an algorithm is currently being visualized.
- * @param {string[]} algorithms - List of available algorithms for the user to choose from.
- * @param {string} selectedAlgorithm - The currently selected algorithm.
- * @param {function} onAlgorithmChange - Handler for updating the selected algorithm.
- * @param {Array<Object>} nodeTypes - List of node types with associated weights for the grid.
- * @param {string} selectedNodeType - The currently selected node type.
- * @param {function} onNodeTypeChange - Handler for updating the selected node type.
- * @param {function} onNodeWeightChange - Handler for updating the weights of node types.
- * @param {function} onStartButtonClick - Handler for starting the visualization.
- * @param {function} onResetButtonClick - Handler for resetting the grid.
- * 
- * @returns {JSX.Element} - A header section with dropdowns for algorithm and node type selection, 
- * and buttons for starting or resetting the visualization.
  */
-const Header = ({ isVisualizing, algorithms, selectedAlgorithm, onAlgorithmChange,
-   nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWeightChange,
-   onStartButtonClick, onResetButtonClick }) => {
+const Header = ({ algorithms, resetTypes, animationSpeed, isRunning, isPaused, isDone,
+   selectedAlgorithm, onAlgorithmChange, nodeTypes, selectedNodeType, onNodeTypeChange,
+   onNodeWeightChange, handleSpeedClick, handleResetClick, handleStartClick,
+   handlePauseClick, handleRestartClick, handleSkipClick }) => {
 
    // Returns React component for header
    return (
       <div className="header-container">
-         <header className="header-title">Pathfinding Visualizer</header>
-         {!isVisualizing && (
-            <div className="selection-container">
-               <AlgDropdown
-                  algorithms={algorithms}
-                  selectedAlgorithm={selectedAlgorithm}
-                  onAlgorithmChange={onAlgorithmChange}>
-               </AlgDropdown>
-               <NodeDropdown
-                  nodeTypes={nodeTypes}
-                  selectedNodeType={selectedNodeType}
-                  onNodeTypeChange={onNodeTypeChange}
-                  onNodeWeightChange={onNodeWeightChange}>
-               </NodeDropdown>
+         <header className="header-title">
+            Pathfinding<br />Visualizer
+         </header>
+         <div className="selection-container">
+            <AlgDropdown
+               algorithms={algorithms}
+               selectedAlgorithm={selectedAlgorithm}
+               onAlgorithmChange={onAlgorithmChange}>
+            </AlgDropdown>
+            <NodeDropdown
+               nodeTypes={nodeTypes}
+               selectedNodeType={selectedNodeType}
+               onNodeTypeChange={onNodeTypeChange}
+               onNodeWeightChange={onNodeWeightChange}>
+            </NodeDropdown>
+            <ResetDropdown
+               resetTypes={resetTypes}
+               handleResetClick={handleResetClick}>
+            </ResetDropdown>
+            <div className="speed-container">
+               <p className="speed-header">Speed:</p>
+               <div className="animation-speed" onClick={handleSpeedClick}>
+                  {animationSpeed}
+               </div>
             </div>
-         )}
-         {isVisualizing && (
-            <div className="output-container">
-               <p className="output-text" id="output-text"></p>
+         </div>
+         <div className="control-container">
+            {(!isRunning || isPaused || isDone) &&
+               (<div
+                  className={`button ${isDone ? "disabled-btn" : ""}`}
+                  id="start-btn"
+                  onClick={isDone ? undefined : handleStartClick}>
+                  <FaPlay className={isDone ? "disabled" : ""} />
+               </div>)}
+            {(isRunning && !isPaused && !isDone) &&
+               (<div
+                  className="button"
+                  id="pause-btn"
+                  onClick={handlePauseClick}>
+                  <FaPause />
+               </div>)}
+            <div
+               className={`button ${!isRunning ? "disabled-btn" : ""}`}
+               id="restart-btn"
+               onClick={!isRunning ? undefined : handleRestartClick}>
+               <FaRedo className={!isRunning ? "disabled" : ""} />
             </div>
-         )}
-         <div className="button-container">
-            <button className="start-button" onClick={onStartButtonClick}>Start</button>
-            <button className="reset-button" onClick={onResetButtonClick}>Reset</button>
+            <div
+               className={`button ${isRunning && !isDone ? "" : "disabled-btn"}`}
+               id="skip-btn"
+               onClick={isRunning && !isDone ? handleSkipClick : undefined}>
+               <FaStepForward className={isRunning && !isDone ? "" : "disabled"} />
+            </div>
          </div>
       </div>
    );
 };
-
 
 export default Header;

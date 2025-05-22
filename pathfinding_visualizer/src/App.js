@@ -2,7 +2,7 @@
  * Facilitates transfer of user input between the Header and the PathfindingVisualizer components.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './App.css';
 import Header from './Header/Header';
 import PathfindingVisualizer from './PathfindingVisualizer/PathfindingVisualizer';
@@ -16,10 +16,13 @@ import PathfindingVisualizer from './PathfindingVisualizer/PathfindingVisualizer
  * @returns {JSX.Element} - The main structure of the app, containing the Header and PathfindingVisualizer components.
  */
 const App = () => {
-   const [isVisualizing, setIsVisualizing] = useState(null);  // Boolean indicating if algorithm is currently being visualized.
-   const [resetGrid, setResetGrid] = useState(null);  // Toggle used to indicate when user clicks reset button.
-   const [selectedAlgorithm, setSelectedAlgorithm] = useState("Dijkstra's Algorithm");  // Currently selected algorithm.
+   const visualizerRef = useRef();
+   const [selectedAlgorithm, setSelectedAlgorithm] = useState("Breadth-first Search");  // Currently selected algorithm.
    const [selectedNodeType, setSelectedNodeType] = useState("Wall");  // Currently selected node type.
+   const [isRunning, setIsRunning] = useState(false);  // Boolean indicating animation in progress.
+   const [isPaused, setIsPaused] = useState(false);  // Boolean indicating animation is paused.
+   const [isDone, setIsDone] = useState(false);  // Boolean indicating animation is done.
+   const [animationSpeed, setAnimationSpeed] = useState("1x");  // Animation speed for the visualizer.
    // Array of objects representing each node type
    const [nodeTypes, setNodeTypes] = useState([
       {
@@ -41,16 +44,28 @@ const App = () => {
       {
          name: "Grass",
          weight: 5,
+      },
+      {
+         name: "Air",
+         weight: 1,
       }
    ]);
 
    // Array of different algorithms
    const algorithms = [
-      "Dijkstra's Algorithm",
       "Breadth-first Search",
-      "Depth-first Search"
+      "Depth-first Search",
+      "Dijkstra's Algorithm",
+      "A* Search",
+      "Greedy Best-first Search"
    ];
 
+   // Array of different grid actions
+   const resetTypes = [
+      "Reset",
+      "Clear Grid",
+      "Remove Walls",
+   ];
 
    /**
     * Updates selectedAlgorithm.
@@ -61,7 +76,6 @@ const App = () => {
       setSelectedAlgorithm(algorithm);
    };
 
-
    /**
     * Updates selectedNodeType.
     * 
@@ -69,8 +83,7 @@ const App = () => {
     */
    const onNodeTypeChange = (nodeType) => {
       setSelectedNodeType(nodeType);
-   }
-
+   };
 
    /**
     * Updates nodeTypes when user changes weights.
@@ -79,50 +92,118 @@ const App = () => {
     */
    const onNodeWeightChange = (newNodeTypes) => {
       setNodeTypes(newNodeTypes);
+      visualizerRef.current?.updateWeights();
+   };
+
+   /**
+    * Updates animation speed when user clicks on the speed button.
+    */
+   const handleSpeedClick = () => {
+      switch (animationSpeed) {
+         case "1x": setAnimationSpeed("1.5x"); break;
+         case "1.5x": setAnimationSpeed("2x"); break;
+         case "2x": setAnimationSpeed("0.5x"); break;
+         case "0.5x": setAnimationSpeed("1x"); break;
+         default: console.warn("Unknown speed:", animationSpeed);
+      }
    }
 
    /**
-    * Sets isVisualizing to true when user clicks start button.
+    * Resets the grid based on the selected reset type.
+    * 
+    * @param {String} resetType - The type of reset action to perform.
     */
-   const onStartButtonClick = () => {
-      setIsVisualizing(true);
+   const handleResetClick = (resetType) => {
+      setIsRunning(false);
+      setIsPaused(false);
+      setIsDone(false);
+      visualizerRef.current?.resetGrid(resetType);
    };
 
    /**
-    * Toggles resetGrid when user clicks reset button.
+    * Starts/resumes algorithm visualization.
     */
-   const onResetButtonClick = () => {
-      setResetGrid(prev => !prev);
+   const handleStartClick = () => {
+      if (!isRunning && !isPaused) {
+         // Fresh start
+         setIsRunning(true);
+         setIsPaused(false);
+         visualizerRef.current?.startVisualization(selectedAlgorithm);
+      } else if (isRunning && isPaused) {
+         // Resume
+         setIsPaused(false);
+         visualizerRef.current?.resumeVisualization();
+      }
    };
+
+   /**
+    * Pauses algorithm visualization.
+    */
+   const handlePauseClick = () => {
+      setIsPaused(true);
+      visualizerRef.current?.pauseVisualization();
+   };
+
+   /**
+    * Restarts algorithm visualization.
+    */
+   const handleRestartClick = () => {
+      setIsRunning(true);
+      setIsPaused(false);
+      setIsDone(false);
+      visualizerRef.current?.restartVisualization(selectedAlgorithm);
+   };
+
+   /**
+    * Skips algorithm visualization.
+    */
+   const handleSkipClick = () => {
+      visualizerRef.current?.skipVisualization();
+   }
+
+   /**
+    * Handles the completion of the visualization.
+    */
+   const handleDoneVisualization = () => {
+      setIsDone(true);
+   }
 
    // Returns main structure of app
    return (
       <div className="App">
          <div className="app-container">
             <Header
-               isVisualizing={isVisualizing}
                algorithms={algorithms}
+               resetTypes={resetTypes}
+               animationSpeed={animationSpeed}
+               isRunning={isRunning}
+               isPaused={isPaused}
+               isDone={isDone}
                selectedAlgorithm={selectedAlgorithm}
                onAlgorithmChange={onAlgorithmChange}
                nodeTypes={nodeTypes}
                selectedNodeType={selectedNodeType}
                onNodeTypeChange={onNodeTypeChange}
                onNodeWeightChange={onNodeWeightChange}
-               onStartButtonClick={onStartButtonClick}
-               onResetButtonClick={onResetButtonClick}>
+               handleSpeedClick={handleSpeedClick}
+               handleResetClick={handleResetClick}
+               handleStartClick={handleStartClick}
+               handlePauseClick={handlePauseClick}
+               handleRestartClick={handleRestartClick}
+               handleSkipClick={handleSkipClick}
+               >
             </Header>
             <PathfindingVisualizer
-               isVisualizing={isVisualizing}
-               setIsVisualizing={setIsVisualizing}
-               resetGrid={resetGrid}
-               selectedAlgorithm={selectedAlgorithm}
+               ref={visualizerRef}
                nodeTypes={nodeTypes}
-               selectedNodeType={selectedNodeType}>
+               animationSpeed={animationSpeed}
+               isRunning={isRunning}
+               selectedNodeType={selectedNodeType}
+               handleDoneVisualization={handleDoneVisualization}>
             </PathfindingVisualizer>
          </div>
       </div>
    );
 };
-
 
 export default App;

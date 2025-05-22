@@ -2,20 +2,13 @@
  * Algorithm Dropdown component in Header
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './AlgDropdown.css'
 
 
 /**
- * Algorithm Dropdown Component in Header.
+ * Algorithm dropdown component in Header.
  * Allows user to select an algorithm to visualize.
- * 
- * @param {string[]} algorithms - List of available algorithms for the user to choose from.
- * @param {string} selectedAlgorithm - The currently selected algorithm.
- * @param {function} onAlgorithmChange - Handler for updating the selected algorithm.
- * @param {Array<Object>} nodeTypes - List of node types with associated weights for the grid.
- * 
- * @returns {JSX.Element} - A dropdown for algorithm selection.
  */
 const AlgDropdown = ({ algorithms, selectedAlgorithm, onAlgorithmChange }) => {
 	const [isOpen, setIsOpen] = useState(false); // Boolean for if dropdown is open.
@@ -39,20 +32,23 @@ const AlgDropdown = ({ algorithms, selectedAlgorithm, onAlgorithmChange }) => {
 			<p>Algorithm:</p>
 			<div className="alg-dropdown">
 				<div className="alg-dropdown-header" onClick={toggleDropdown}>
-					{selectedAlgorithm}
-					<span className="alg-dropdown-arrow">{isOpen ? "▲" : "▼"}</span>
+					<div className="selected-alg-container">
+						{selectedAlgorithm}
+					</div>
+					<div className="alg-dropdown-arrow-container" onClick={toggleDropdown}>
+						<span className="alg-dropdown-arrow">{isOpen ? "▲" : "▼"}</span>
+					</div>
 				</div>
 				{isOpen && (
 					<ul className="alg-dropdown-list">
-						{algorithms.map((algorithm, index) => (
+						{algorithms
+							.filter(algorithm => algorithm !== selectedAlgorithm)
+							.map((algorithm, index) => (
 							<li
 								key={index}
 								className="alg-dropdown-list-item"
 								onClick={() => handleOptionClick(algorithm)}>
 								{algorithm}
-								{algorithm === selectedAlgorithm &&
-									(<span className="selected-alg-checkmark">&#10004;</span>)
-								}
 							</li>
 						))}
 					</ul>

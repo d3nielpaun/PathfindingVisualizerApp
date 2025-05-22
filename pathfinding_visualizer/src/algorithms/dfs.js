@@ -16,7 +16,7 @@
  */
 const runDFS = (grid, node, finishNode, visitedNodesInOrder = []) => {
     // Base case: if the node is null, a wall, or already visited, return false
-    if (!node || node.type === "Wall" || node.isVisited) {
+    if (!node || node.weight === Infinity || node.isVisited) {
         return false;
     }
 
@@ -61,7 +61,7 @@ const getUnvisitedNeighbors = (node, grid) => {
     if (col > 0) neighbors.push(grid[row][col - 1]); // Left
 
     // Filters out neighbors that were visited
-    return neighbors.filter(neighbor => !neighbor.isVisited && neighbor.type !== "Wall");
+    return neighbors.filter(neighbor => !neighbor.isVisited && neighbor.weight !== Infinity);
 };
 
 
@@ -101,7 +101,7 @@ const dfs = (grid, startNode, finishNode) => {
     runDFS(grid, startNode, finishNode, visitedNodesInOrder);
 
     // Check if we reached the finishNode to create the path
-    const shortestPath = finishNode.isVisited ? getNodesInShortestPathOrder(finishNode) : null;
+    const shortestPath = finishNode.isVisited ? getNodesInShortestPathOrder(finishNode) : [];
 
     // Returns statistics
     return {

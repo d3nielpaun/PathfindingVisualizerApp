@@ -8,9 +8,10 @@
 }
 
 .node-dropdown-container p {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     margin-right: 5px;
     font-weight: bold;
+    color: white;
 }
 
 .node-dropdown {
@@ -48,12 +49,12 @@
 }
 
 .node-dropdown-arrow-container:hover {
-    border: 2px solid var(--accent-color);
+    background: var(--accent-color);
 }
 
 .node-dropdown-arrow {
     font-size: 12px;
-    color: white;
+    color: black;
 }
 
 .node-dropdown-list {
@@ -94,7 +95,10 @@
     width: 150px;
     background: var(--secondary-header-color);
     border-left: 2px solid var(--header-color);
-    color: white;
+}
+
+.weights-label-container p {
+    color: black
 }
 
 .weight-slider-container {
@@ -182,4 +186,8 @@
 
 .grass {
     background: var(--grass-node-color);
+}
+
+.air {
+    background: var(--air-node-color);
 }

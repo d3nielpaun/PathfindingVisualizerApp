@@ -50,7 +50,7 @@ const bfs = (grid, startNode, finishNode) => {
     return {
         visitedNodesInOrder,
         numNodesVisited: visitedNodesInOrder.length - 1,
-        shortestPath: null, // No path found
+        shortestPath: [], // No path found
         shortestPathLength: 0,
     };
 };
@@ -74,7 +74,7 @@ const getUnvisitedNeighbors = (node, grid) => {
     if (col > 0) neighbors.push(grid[row][col - 1]); // Left
     if (col < grid[0].length - 1) neighbors.push(grid[row][col + 1]); // Right
 
-    return neighbors.filter(neighbor => !neighbor.isVisited && neighbor.type !== "Wall");
+    return neighbors.filter(neighbor => !neighbor.isVisited && neighbor.weight !== Infinity);
 };
 
 

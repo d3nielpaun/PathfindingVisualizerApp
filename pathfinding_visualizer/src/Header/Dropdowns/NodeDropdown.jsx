@@ -7,13 +7,8 @@ import './NodeDropdown.css'
 
 
 /**
- * 
- * @param {Array<Object>} nodeTypes - List of node types with associated weights for the grid.
- * @param {string} selectedNodeType - The currently selected node type.
- * @param {function} onNodeTypeChange - Handler for updating the selected node type.
- * @param {function} onNodeWeightChange - Handler for updating the weights of node types.
- * 
- * @returns {JSX.Element} - A dropdown for node type selection.
+ * Node dropdown component in Header.
+ * Allows user to select node type and adjust their weights.
  */
 const NodeDropdown = ({ nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWeightChange }) => {
 	const [isOpen, setIsOpen] = useState(false);  // Boolean for if dropdown is open.
@@ -48,7 +43,7 @@ const NodeDropdown = ({ nodeTypes, selectedNodeType, onNodeTypeChange, onNodeWei
 		<div className="node-dropdown-container">
 			<p>Node Type:</p>
 			<div className="node-dropdown">
-				<div className="node-dropdown-header">
+				<div className="node-dropdown-header" onClick={toggleDropdown}>
 					<div className="selected-node-container">
 						<div className={`node-type ${selectedNodeType.toLowerCase()}`}></div>
 						{selectedNodeType}

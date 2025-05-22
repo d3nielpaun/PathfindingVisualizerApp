@@ -6,22 +6,13 @@
     --water-node-color: rgb(32, 64, 160);
     --sand-node-color: rgb(203, 189, 147);
     --grass-node-color: rgb(51, 112, 51);
-    --visited-node-color: rgb(155, 222, 231);
+    --air-node-color: rgb(227, 227, 227);
+    --visited-node-color: rgb(240, 214, 170);
     --visited-mud-node-color: rgb(180, 106, 72);
     --visited-water-node-color: rgb(66, 100, 223);
     --visited-sand-node-color: rgb(233, 230, 100);
     --visited-grass-node-color: rgb(65, 173, 65);
     --shortest-path-node-color: rgba(255, 0, 0, 0.641);
-}
-
-.node {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 27px;
-    height: 27px;
-    border-right: 1px solid var(--node-border-color);
-    transition: background-color 0.2s;
 }
 
 .node-start {
@@ -50,6 +41,10 @@
 
 .node-grass {
     background: var(--grass-node-color);
+}
+
+.node-air {
+    background: var(--air-node-color);
 }
 
 .node-visited {
