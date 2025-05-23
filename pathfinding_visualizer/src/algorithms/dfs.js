@@ -4,15 +4,13 @@
 
 
 /**
- * Uses recursion to execute Depth-first Search on grid.
- * Marks each visited node.
+ * Executes Depth-first Search via recursion.
  * 
  * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes.
- * @param {Object} node - The current node being evaluated during the search.
+ * @param {Object} startNode - The node to start BFS from.
  * @param {Object} finishNode - The target node to find in the grid.
- * @param {Array<Object>} visitedNodesInOrder - An array that stores the nodes visited during the DFS.
- * 
- * @returns {boolean} - Returns `true` if a path to the finish node is found, `false` otherwise.
+ * @param {Array<Object>} visitedNodesInOrder - Array to hold the order of visited nodes.
+ * @returns {Object} - Object holding statistics of DFS.
  */
 const runDFS = (grid, node, finishNode, visitedNodesInOrder = []) => {
     // Base case: if the node is null, a wall, or already visited, return false
@@ -111,6 +109,5 @@ const dfs = (grid, startNode, finishNode) => {
         shortestPathLength: shortestPath ? shortestPath.length - 1 : 0,
     };
 };
-
 
 export { dfs };

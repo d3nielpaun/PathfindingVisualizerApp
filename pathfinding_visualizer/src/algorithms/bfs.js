@@ -4,13 +4,11 @@
 
 
 /**
- * Executed Breadth-first Search.
- * Marks each visited node.
+ * Executes Breadth-first Search.
  * 
- * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes. 
+ * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes.
  * @param {Object} startNode - The node to start BFS from.
  * @param {Object} finishNode - The target node to find in the grid.
- * 
  * @returns {Object} - Object holding statistics of BFS.
  */
 const bfs = (grid, startNode, finishNode) => {
@@ -50,7 +48,7 @@ const bfs = (grid, startNode, finishNode) => {
     return {
         visitedNodesInOrder,
         numNodesVisited: visitedNodesInOrder.length - 1,
-        shortestPath: [], // No path found
+        shortestPath: [],
         shortestPathLength: 0,
     };
 };
@@ -96,6 +94,5 @@ const getNodesInShortestPathOrder = (finishNode) => {
     
     return nodesInShortestPathOrder;
 };
-
 
 export { bfs };

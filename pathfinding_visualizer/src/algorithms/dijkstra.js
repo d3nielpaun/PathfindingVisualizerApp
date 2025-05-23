@@ -5,13 +5,11 @@
 import { Heap } from 'heap-js';
 
 /**
- * Uses MinHeap to execute Dijkstra's Algorithm.
- * Marks each visited node.
+ * Executes Dijkstra's Algorithm.
  * 
  * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes. 
  * @param {Object} startNode - The node to start Dijkstra's Search from.
  * @param {Object} finishNode - The target node to find in the grid.
- * 
  * @returns {Object} - Object holding statistics of Dijkstra's Algorithm.
  */
 const dijkstra = (grid, startNode, finishNode) => {
@@ -92,6 +90,5 @@ const getNodesInShortestPathOrder = (finishNode) => {
     }
     return nodesInShortestPathOrder;
 };
-
 
 export { dijkstra };

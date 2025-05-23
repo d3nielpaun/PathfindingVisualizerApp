@@ -5,14 +5,12 @@ Implements A* algorithm
 import { Heap } from 'heap-js';
 
 /**
- * Uses MinHeap to execute A* Algorithm.
- * Marks each visited node.
+ * Executes A* Algorithm.
  * 
- * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes. 
- * @param {Object} startNode - The node to start Dijkstra's Search from.
+ * @param {Array<Array<Object>>} grid - 2D array representing the grid of nodes.
+ * @param {Object} startNode - The node to start BFS from.
  * @param {Object} finishNode - The target node to find in the grid.
- * 
- * @returns {Object} - Object holding statistics of Dijkstra's Algorithm.
+ * @returns {Object} - Object holding statistics of A* Search.
  */
 const astar = (grid, startNode, finishNode) => {
     const visitedNodesInOrder = [];
@@ -57,7 +55,7 @@ const astar = (grid, startNode, finishNode) => {
     return {
         visitedNodesInOrder,
         numNodesVisited: visitedNodesInOrder.length - 1,
-        shortestPath: [], // No path found
+        shortestPath: [],
         shortestPathLength: 0,
     };
 };
@@ -80,6 +78,13 @@ const getValidNeighbors = (node, grid) => {
     return neighbors.filter(neighbor => !neighbor.isVisited && neighbor.weight !== Infinity);
 };
 
+/**
+ * Calculates the Manhattan distance between two nodes.
+ * 
+ * @param {Object} node1 - The first node.
+ * @param {Object} node2 - The second node.
+ * @returns {Integer} - The Manhattan distance between the two nodes.
+ */
 const manhattanDistance = (node1, node2) => {
     return Math.abs(node1.row - node2.row) + Math.abs(node1.col - node2.col);
 };
@@ -100,6 +105,5 @@ const getNodesInShortestPathOrder = (finishNode) => {
     }
     return nodesInShortestPathOrder;
 };
-
 
 export { astar };
